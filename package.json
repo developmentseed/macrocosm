@@ -1,0 +1,44 @@
+{
+  "name": "macrocosm",
+  "version": "0.0.1",
+  "description": "The OSM API as a platform in NodeJS",
+  "main": "index.js",
+  "engine": "node 4.0.0",
+  "scripts": {
+    "start": "node index.js",
+    "test": "MACROCOSM_DEBUG=true mocha --recursive",
+    "gendoc": "./node_modules/.bin/apidoc -i routes",
+    "postinstall": "npm run gendoc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/developmentseed/macrocosm.git"
+  },
+  "keywords": [
+    "OSM"
+  ],
+  "author": "Development Seed",
+  "license": "http://unlicense.org/",
+  "bugs": {
+    "url": "https://github.com/developmentseed/macrocosm/issues"
+  },
+  "homepage": "https://github.com/developmentseed/macrocosm",
+  "dependencies": {
+    "apidoc": "^0.12.3",
+    "bluebird": "^2.9.24",
+    "boom": "^2.7.0",
+    "hapi": "^8.4.0",
+    "hapi-router": "^3.0.1",
+    "knex": "^0.7.6",
+    "libxmljs": "^0.14.0",
+    "lodash": "^3.6.0",
+    "pg": "^4.3.0",
+    "winston": "^0.9.0"
+  },
+  "devDependencies": {
+    "inject-then": "^2.0.0",
+    "mocha": "^2.2.1",
+    "should": "^5.2.0",
+    "split": "^0.3.3"
+  }
+}
