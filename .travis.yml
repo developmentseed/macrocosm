@@ -1,0 +1,19 @@
+language: node_js
+
+node_js:
+  - '0.12'
+
+env:
+  global:
+  - GH_REF=github.com/developmentseed/macrocosm.git
+  - PRODUCTION_BRANCH=master
+  - secure: EjP+sD6PnYinjAE+cVJSj2hihWryjgqlz80PvxV0alt0rac8wscDMo5FWvvzpddpjoy4DRUUmH+gHcUDoShAVIQJpki10IHMfd19+Udylo5rbmTnTVBxZEXxamQ/yPWnxFwCrQrTw6LuIRRoUsoY83+whUtthbxTx/U47qnauhZoAhXRcc4zhSmORrcSROZ1MUOVUIyplm6nL03wVLXIreXoZGpeLKjbEGcxkq2FA8qvRiVe1kPCYRyOnWxSMTYBDYXOjEKC43+FazaLu3rcVnOVRidksw7ibiPdJtTJc4yv5eMHWoKqcEAQOn5Z2ifFTzmVg1RL75XNYgqMDn3gD85MiB60zjpL/mZvlTo+EIR0JEcQRUKq/QrE/hhUzU7aAu7DDgk/78gZ1+XAMP0pGSTHycMHzZla+nzqolWoO5DQ8mMXLwqO4h9d16PG2nUIzvYnmg9iEUONWk7NZgmeYSMk8j3ZSJ7XdOzwdFMeISeM7WDRXu2BhswKFbTnU1Ki4+C1iQCmgW0kuPQawbTo0cej+f0QjLvAweBAEcr+zcys19x/QIleMjL1NWI3T1YJ9NwkVcTLtekoqvm7rGPmjcbduvQi5ktFtJwvUOJWE6d4cPTxSeXX3xgU34AzuNBy8V2EQniYuf9QfiQe3ACk4pbxLg+zPT9ZDmcTeFiT+cw=
+
+before_install:
+  - chmod +x ./.build_scripts/docs.sh
+
+script:
+  - npm test
+
+after_success:
+  - travis_wait ./.build_scripts/docs.sh

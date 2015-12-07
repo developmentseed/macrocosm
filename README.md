@@ -1,4 +1,5 @@
 # MACROCOSM
+[![Build Status](https://travis-ci.org/developmentseed/macrocosm.svg?branch=master)](https://travis-ci.org/developmentseed/macrocosm)
 
 Macrocosm is a partial port of the Open Street Map [Ruby API](https://github.com/openstreetmap/openstreetmap-website) in NodeJS. With Macrocosm, you can host your own version of the OSM platform. It plays well with the [iD editor](https://github.com/openstreetmap/iD) but supports other data inputs, including direct uploads of OSM XML.
 
