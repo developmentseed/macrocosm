@@ -5,7 +5,7 @@ set -e # halt script on error
 if [ $TRAVIS_PULL_REQUEST = "false" ] && [ $TRAVIS_BRANCH = ${PRODUCTION_BRANCH} ]; then
   echo "Get ready to publish the docs"
   npm run gendoc
-  cd docs
+  cd doc
   git init
   git config user.name "Travis-CI"
   git config user.email "travis@somewhere.com"
