@@ -1,6 +1,6 @@
 {
   "name": "macrocosm",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The OSM API as a platform in NodeJS",
   "main": "index.js",
   "engine": "node 4.0.0",
@@ -18,7 +18,7 @@
     "OSM"
   ],
   "author": "Development Seed",
-  "license": "http://unlicense.org/",
+  "license": "GPL-2.0",
   "bugs": {
     "url": "https://github.com/developmentseed/macrocosm/issues"
   },
