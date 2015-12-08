@@ -7,6 +7,12 @@
   "scripts": {
     "start": "node index.js",
     "test": "MACROCOSM_DEBUG=true mocha --recursive",
+    "docker-start": "docker-compose up -d api && docker-compose build",
+    "docker-stop": "docker-compose stop",
+    "docker-logs": "docker-compose logs api",
+    "docker-test": "docker-compose build && docker-compose run api npm test && docker-compose stop && docker-compose rm -f",
+    "docker-start-db": "docker-compose up -d postgres",
+    "docker-kill-db": "docker-compose kill postgres",
     "gendoc": "./node_modules/.bin/apidoc -i routes",
     "postinstall": "npm run gendoc"
   },
