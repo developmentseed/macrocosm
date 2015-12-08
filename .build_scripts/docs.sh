@@ -4,7 +4,7 @@ set -e # halt script on error
 # If this is the master branch, push it up to gh-pages
 if [ $TRAVIS_PULL_REQUEST = "false" ] && [ $TRAVIS_BRANCH = ${PRODUCTION_BRANCH} ]; then
   echo "Get ready to publish the docs"
-  npm run docs
+  npm run gendoc
   cd docs
   git init
   git config user.name "Travis-CI"
