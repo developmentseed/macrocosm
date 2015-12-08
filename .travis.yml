@@ -13,7 +13,7 @@ before_install:
   - chmod +x ./.build_scripts/docs.sh
 
 script:
-  #- npm test
+  - echo SKIP TESTS FOR NOW
 
 after_success:
   - travis_wait ./.build_scripts/docs.sh
