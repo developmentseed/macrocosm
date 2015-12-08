@@ -16,4 +16,4 @@ script:
   - echo SKIP TESTS FOR NOW
 
 after_success:
-  - travis_wait ./.build_scripts/docs.sh
+  - ./.build_scripts/docs.sh
