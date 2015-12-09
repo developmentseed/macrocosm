@@ -10,7 +10,7 @@ describe('changeset create endpoint', function () {
       return transaction('changesets').whereIn('id', changesets).del().returning('*')
         .then(function(deleted) {
           console.log(deleted.length, 'changesets deleted');
-          return transaction('users').where('id', '9999').del().returning('*');
+          return transaction('users').whereIn('id', [99, 1337]).del().returning('*');
         })
         .then(function(deleted) {
           console.log(deleted.length, 'users deleted');
@@ -22,14 +22,14 @@ describe('changeset create endpoint', function () {
     .catch(done);
   });
 
-  it('creates a new user if id nonexistant and returns a numerical changeset id', function (done) {
+  it('returns a numerical changeset id.', function (done) {
     server.injectThen({
       method: 'PUT',
       url: '/changeset/create',
       payload: {
-        uid: 9999,
-        user: 'rolling jack',
-        comment: 'this is a test comment'
+        uid: 99,
+        user: 'openroads',
+        comment: 'test comment'
       }
     })
     .then(function (res) {
@@ -43,4 +43,28 @@ describe('changeset create endpoint', function () {
       return done(err);
     });
   });
+
+  it('creates a user with the given id if one does not exist', function (done) {
+    server.injectThen({
+      method: 'PUT',
+      url: '/changeset/create',
+      payload: {
+        uid: 1337,
+        user: 'openroads test user',
+        comment: 'test comment'
+      }
+    })
+    .then(function (res) {
+      res.statusCode.should.eql(200);
+      var result = JSON.parse(res.payload);
+      result.id.should.be.within(0, Number.MAX_VALUE);
+      changesets.push(result.id);
+      done();
+    })
+    .catch(function (err) {
+      return done(err);
+    });
+
+  });
+
 });

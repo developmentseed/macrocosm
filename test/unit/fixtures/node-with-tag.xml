@@ -1,0 +1,1 @@
+module.exports = '<?xml version="1.0"?><osmChange version="0.3" generator="or"><create><node id="-1" lat="0" lon="0" user="openroads" visible="true"><tag k="key" v="test"/></node></create><modify/><delete if-unused="true"/></osmChange>'

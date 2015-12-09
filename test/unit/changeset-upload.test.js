@@ -24,21 +24,6 @@ function makeNodes(changesetId, ii) {
   return nodes;
 }
 
-describe('Area helper functions', function () {
-  it('Test helper creates properly formed areas', function () {
-    var nodes = makeNodes(1, 10);
-    var area = new Area().nodes(nodes);
-    var nd = area.entity.nd;
-    // Length of node references is one more than total existant nodes
-    nd.should.have.lengthOf(11);
-    // Last node should be first node
-    nd[0].ref.should.equal(nd[nd.length-1].ref);
-    // Should have key/value of area: true
-    area.entity.tag[0].k.should.equal('area');
-    area.entity.tag[0].v.should.equal(true);
-  });
-});
-
 describe('changeset upload endpoint', function() {
   after(function (done) {
     testChangeset.remove()
