@@ -1,0 +1,12 @@
+postgres:
+  build: ./db-server
+  ports:
+    - "5433:5432"
+api:
+  build: .
+  environment:
+    - DATABASE_URL=postgres://osm:password@postgres:5432/macrocosm_test
+  links:
+    - postgres:postgres
+  ports:
+    - "4000:4000"

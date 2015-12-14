@@ -5,6 +5,7 @@ var XML = require('../../services/xml.js');
 
 var jsonChangeset = require('./fixtures/xml-read.js').osmChange;
 var xmlChangeset = require('./fixtures/xml-read.xml');
+var taggedNode = require('./fixtures/node-with-tag.xml');
 
 var Node = require('../../models/node-model.js');
 var Way = require('../../models/way.js');
@@ -31,6 +32,11 @@ describe('XML', function() {
     it('Encodes the right number of tags', function() {
       var parsed = XML.read(xmlChangeset);
       (parsed.modify.way[0].tag.length).should.eql(jsonChangeset.modify.way[0].tag.length);
+    });
+
+    it('Encodes the proper tags', function() {
+      var parsed = XML.read(taggedNode);
+      (parsed.create.node[0].tag[0].v).should.eql('test');
     });
 
     it('Creates comparable nodes using Node#fromEntity', function() {

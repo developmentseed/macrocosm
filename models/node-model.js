@@ -116,8 +116,8 @@ var Node = {
       var t = children[i];
       if (t.name() === 'tag') {
         tags.push({
-          k: t.attr('k'),
-          v: t.attr('v')
+          k: t.attr('k').value(),
+          v: t.attr('v').value()
         });
       }
     }
