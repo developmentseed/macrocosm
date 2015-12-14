@@ -1,9 +1,15 @@
+sudo: required
+
 language: node_js
 
 node_js:
   - '0.12'
 
+services:
+  - docker
+
 env:
+  DOCKER_COMPOSE_VERSION: 1.5.1
   global:
   - GH_REF=github.com/developmentseed/macrocosm.git
   - PRODUCTION_BRANCH=master
@@ -11,9 +17,19 @@ env:
 
 before_install:
   - chmod +x ./.build_scripts/docs.sh
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 
 script:
-  - echo SKIP TESTS FOR NOW
+  - docker-compose stop
+  - docker-compose rm -f
+  - docker-compose run api npm test
+
+after_script:
+  - docker-compose stop
+  - docker-compose rm -f
 
 after_success:
   - ./.build_scripts/docs.sh
