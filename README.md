@@ -3,6 +3,8 @@
 
 Macrocosm is a partial port of the Open Street Map [Ruby API](https://github.com/openstreetmap/openstreetmap-website) in NodeJS. With Macrocosm, you can host your own version of the OSM platform. It plays well with the [iD editor](https://github.com/openstreetmap/iD) but supports other data inputs, including direct uploads of OSM XML.
 
+API docs are [available here](http://devseed.com/macrocosm/).
+
 ## What's included
 
 1. **Changeset creation and upload**: create `nodes`, `ways`, `relations`, and their respective `tags`, using `changesets` to record metadata. Like in OSM, `changesets` record `create`, `modify`, and `delete` actions. Unlike OSM, there is no concept of closing `changesets`. They close after the last change is recorded.
@@ -12,8 +14,6 @@ Macrocosm is a partial port of the Open Street Map [Ruby API](https://github.com
 3. **Bulk uploads**: so you can populate an OSM-like database using OSM XML directly through the Macrocosm API.
 
 ## Installation
-
-### Installing dependencies
 
 ```sh
 git clone git@github.com:developmentseed/macrocosm.git
@@ -32,7 +32,7 @@ For Mac OS X or Windows, make sure you're running the following commands in a te
 You can also just spin up the database and make it available on `$DOCKER_HOST:5433`:
 
 ```sh
-npm run docker-start-db # start the db in the on its own at 
+npm run docker-start-db # start the db
 npm run docker-kill-db # kills the db
 ```
 
@@ -72,7 +72,7 @@ Now you can run your tests on a separate database:
 MACROCOSM_ENV=test npm run test
 ```
 
-### Building the documentation locally
+## Building the documentation locally
 
 ```sh
 npm run gendoc
