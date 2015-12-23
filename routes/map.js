@@ -38,7 +38,7 @@ module.exports = {
    *  </osm>
    */
   method: 'GET',
-  path: '/xml/map',
+  path: '/api/0.6/map',
   handler: function (req, res) {
     // parse and validate bbox parameter from query
     // See services/BoundingBox.js.
