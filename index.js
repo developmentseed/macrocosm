@@ -1,5 +1,7 @@
 'use strict';
 var Hapi = require('hapi');
+var xml2json = require('xml2json');
+
 var server = new Hapi.Server({
   connections: {
     routes: {
@@ -22,6 +24,16 @@ server.register({
   }
 }, function (err) {
   if (err) throw err;
+});
+
+server.ext('onPostAuth', function(req, res) {
+  if (req.mime === 'text/xml') {
+    req.payload = xml2json.toJson(req.payload, {
+      object: true
+    });
+  }
+
+  return res.continue();
 });
 
 server.start(function () {
