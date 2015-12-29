@@ -27,7 +27,7 @@ server.register({
 });
 
 server.ext('onPostAuth', function(req, res) {
-  if (req.mime === 'text/xml') {
+  if (req.mime === 'text/xml' && Object.keys(req.payload || {}).length > 0) {
     req.payload = xml2json.toJson(req.payload, {
       object: true
     });
