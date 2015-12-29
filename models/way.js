@@ -152,6 +152,10 @@ var Way = {
 
     var raw = q.changeset.create.way;
 
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
     // Create a list of models of just way creations with proper attributes.
     var models = raw.map(function(entity) { return Way.fromEntity(entity, q.meta); });
 
@@ -213,6 +217,10 @@ var Way = {
 
   modify: function(q) {
     var raw = q.changeset.modify.way;
+
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
 
     return Promise.map(raw, function(entity) {
       var model = Way.fromEntity(entity, q.meta);

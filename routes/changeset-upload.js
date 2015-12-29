@@ -82,11 +82,13 @@ function _upload(meta, changeset) {
         log.info('Relations transaction completed', (new Date() - time) / 1000, 'seconds');
         time = new Date();
         var newMeta = updateChangeset(meta, changeset);
-        log.info('New changeset updated', (new Date() - time) / 1000, 'seconds');
-        knex('changesets')
+        return knex('changesets')
           .where('id', meta.id)
-          .update(newMeta);
-        return {changeset: _.extend({}, newMeta, saved), created: queryData.map};
+          .update(newMeta)
+          .then(function() {
+            log.info('New changeset updated', (new Date() - time) / 1000, 'seconds');
+            return {changeset: _.extend({}, newMeta, saved), created: queryData.map};
+          });
       })
       .catch(function(err) {
         // Once we get here, rollback should happen automatically,
@@ -109,7 +111,12 @@ function updateChangeset(meta, changeset) {
       nodes = nodes.concat(changeset[action].node);
     }
     ['node', 'way', 'relation'].forEach(function(entity) {
-      numChanges += changeset[action][entity] ? changeset[action][entity].length : 0;
+      if (Array.isArray(changeset[action][entity])) {
+        numChanges += changeset[action][entity].length;
+      } else if (changeset[action][entity] != null) {
+        // not null, but not an array either, so assume this is a single entry
+        numChanges += 1;
+      }
     });
   });
 
@@ -208,6 +215,6 @@ module.exports = {
    *   }
    */
   method: 'POST',
-  path: '/changeset/{changesetID}/upload',
+  path: '/api/0.6/changeset/{changesetID}/upload',
   handler: upload
 };

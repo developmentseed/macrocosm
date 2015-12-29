@@ -196,6 +196,10 @@ var Node = {
 
     var raw = q.changeset.create.node;
 
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
     // Map each node creation to a model with proper attributes.
     var models = raw.map(function(entity) { return Node.fromEntity(entity, q.meta); });
 
@@ -253,6 +257,10 @@ var Node = {
 
   modify: function(q) {
     var raw = q.changeset.modify.node;
+
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
 
     function deleteTags () {
       var ids = raw.map(function(entity) { return parseInt(entity.id, 10); });
