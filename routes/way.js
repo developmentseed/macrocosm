@@ -31,11 +31,11 @@ module.exports = [
    * @api {get} /xml/way/:wayId/[full] Get way by ID
    * @apiGroup Features
    * @apiName XmlWay
-   * @apiDescription Returns OSM XML of requested Way along with full 
-   * representation of nodes in that way. Appending `/full` to the endpoint 
+   * @apiDescription Returns OSM XML of requested Way along with full
+   * representation of nodes in that way. Appending `/full` to the endpoint
    * returns the same result.
    * @apiVersion 0.1.0
-   * 
+   *
    * @apiParam {Number} id Way ID.
    *
    * @apiSuccess {XML} way Relation
@@ -49,10 +49,10 @@ module.exports = [
    * @apiSuccess {String} way.lat Entity latitude
    * @apiSuccess {String} way.lon Entity longitude
    *
-   * @apiExample {curl} Example Usage: 
+   * @apiExample {curl} Example Usage:
    *    curl http://localhost:4000/xml/way/26
-   *  
-   *  
+   *
+   *
    * @apiSuccessExample {xml} Success-Response:
    *  <osm version="6" generator="OpenRoads">
    *    <node id="27" visible="true" version="1" changeset="0" timestamp="Wed Mar 11 2015 09:38:41 GMT+0000 (UTC)" user="OpenRoads" uid="1" lat="9.787903" lon="123.939617"/>

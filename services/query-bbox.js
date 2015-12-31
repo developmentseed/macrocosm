@@ -236,4 +236,3 @@ module.exports = function queryBbox(knex, bbox) {
       };
     });
 };
-
