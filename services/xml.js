@@ -1,6 +1,13 @@
 'use strict';
+
+var util = require('util');
+
 var libxml = require('libxmljs');
 var _ = require('lodash');
+
+var meta = require('../package.json');
+
+var GENERATOR = util.format('%s (v%s)', meta.name, meta.version);
 var RATIO = require('./ratio');
 
 var log = require('../services/log.js');
@@ -91,7 +98,7 @@ var xml = {
 
   writeDoc: function() {
     var doc = new libxml.Document();
-    doc.node('osm').attr({ version: 0.6, generator: 'DevelopmentSeed' });
+    doc.node('osm').attr({ version: 0.6, generator: GENERATOR });
     return doc;
   },
 
