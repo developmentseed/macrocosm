@@ -113,7 +113,7 @@ var xml = {
         visible: node.visible,
         version: node.version,
         changeset: node.changeset_id,
-        timestamp: node.timestamp,
+        timestamp: node.timestamp.toISOString(),
         user: 'DevelopmentSeed',
         uid: 1,
         lat: node.latitude / RATIO,
@@ -139,7 +139,7 @@ var xml = {
         visible: way.visible,
         version: way.version,
         changeset: way.changeset_id,
-        timestamp: way.timestamp,
+        timestamp: way.timestamp.toISOString(),
         user: 'DevelopmentSeed',
         uid: 1
       });
@@ -179,7 +179,7 @@ var xml = {
         visible: relation.visible,
         version: relation.version,
         changeset: relation.changeset_id,
-        timestamp: relation.timestamp,
+        timestamp: relation.timestamp.toISOString(),
         user: 'DevelopmentSeed',
         uid: 1
       });
