@@ -37,16 +37,23 @@ var rsp = {
   }
 };
 
+function capabilities(req, res) {
+  var response = res(builder.create(rsp).end({
+    pretty: true
+  }));
+
+  response.type('text/xml');
+}
+
 module.exports = [
   {
     method: 'GET',
     path: '/api/capabilities',
-    handler: function(req, res) {
-      var response = res(builder.create(rsp).end({
-        pretty: true
-      }));
-
-      response.type('text/xml');
-    }
+    handler: capabilities
+  },
+  {
+    method: 'GET',
+    path: '/api/0.6/capabilities',
+    handler: capabilities
   }
 ];
