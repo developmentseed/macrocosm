@@ -91,7 +91,7 @@ var xml = {
 
   writeDoc: function() {
     var doc = new libxml.Document();
-    doc.node('osm').attr({ version: 6, generator: 'DevelopmentSeed' });
+    doc.node('osm').attr({ version: 0.6, generator: 'DevelopmentSeed' });
     return doc;
   },
 
