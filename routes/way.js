@@ -15,7 +15,6 @@ function serveSingleWay(req, res) {
   queryWays(knex, wayId)
   .then(function (result) {
     var xmlDoc = XML.write({
-      nodes: Node.withTags(result.nodes, result.nodetags, 'node_id'),
       ways: Node.withTags(result.ways, result.waytags, 'way_id')
     });
     var response = res(xmlDoc.toString());
