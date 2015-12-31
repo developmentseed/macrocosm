@@ -2,7 +2,6 @@
 
 var _ = require('lodash');
 var Boom = require('boom');
-var Promise = require('bluebird');
 
 var knex = require('../connection.js');
 var BoundingBox = require('../services/bounding-box.js');

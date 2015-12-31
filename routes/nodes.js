@@ -1,6 +1,5 @@
 'use strict';
 var Boom = require('boom');
-var Promise = require('bluebird');
 
 var knex = require('../connection.js');
 var XML = require('../services/xml.js');

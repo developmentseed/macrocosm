@@ -1,8 +1,6 @@
 'use strict';
 var Boom = require('boom');
 var knex = require('../connection.js');
-var log = require('../services/log.js');
-var Promise = require('bluebird');
 
 module.exports = [
   /**
