@@ -50,24 +50,24 @@ function upload(req, res) {
 }
 
 function _upload(meta, changeset) {
-    // Useful to keep track of how long stuff takes.
-    var time = new Date();
-    log.info('Starting changeset transaction');
-    return knex.transaction(function(transaction) {
+  // Useful to keep track of how long stuff takes.
+  var time = new Date();
+  log.info('Starting changeset transaction');
+  return knex.transaction(function(transaction) {
 
-      var queryData = {
-        // Map of old ids to newly-created ones.
-        map: {
-          node: {},
-          way: {},
-          relation: {}
-        },
-        transaction: transaction,
-        changeset: changeset,
-        meta: meta
-      };
+    var queryData = {
+      // Map of old ids to newly-created ones.
+      map: {
+        node: {},
+        way: {},
+        relation: {}
+      },
+      transaction: transaction,
+      changeset: changeset,
+      meta: meta
+    };
 
-      return models.node.save(queryData)
+    return models.node.save(queryData)
       .then(function() {
         log.info('Nodes transaction completed', (new Date() - time) / 1000, 'seconds');
         time = new Date();
@@ -98,7 +98,7 @@ function _upload(meta, changeset) {
         log.error('Changeset update fails', err);
         return res(Boom.badImplementation('Could not update changeset'));
       });
-  })
+  });
 }
 
 function updateChangeset(meta, changeset) {
