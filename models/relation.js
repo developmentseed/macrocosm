@@ -8,7 +8,6 @@
 
 var _ = require('lodash');
 var Boom = require('boom');
-var Promise = require('bluebird');
 
 var knex = require('../connection.js');
 var Member = require('./relation-member.js');
@@ -134,13 +133,13 @@ var Relation = {
     var actions = [];
     var model = this;
     ['create', 'modify', 'delete'].forEach(function(action) {
-      if (q.changeset[action].relation) {
+      if (q.changeset[action] && q.changeset[action].relation) {
         actions.push(action);
       }
     });
-    return Promise.map(actions, function(action) {
+    return Promise.all(actions.map(function(action) {
       return model[action](q);
-    })
+    }))
     .catch(function(err) {
       log.error('Relation changeset fails', err);
       throw new Error(err);
@@ -173,12 +172,17 @@ var Relation = {
 
   modify: function(q) {
     var raw = q.changeset.modify.relation;
+
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
     var ids = _.pluck(raw, 'id');
 
-    return Promise.map(raw, function(entity) {
+    return Promise.all(raw.map(function(entity) {
       var model = Relation.fromEntity(entity, q.meta);
       return q.transaction(Relation.tableName).where({ id: entity.id }).update(model)
-    })
+    }))
     .then(function() {
       return Relation.destroyDependents(ids, q.transaction);
     })

@@ -135,7 +135,7 @@ var Way = {
     var actions = [];
     var model = this;
     ['create', 'modify', 'delete'].forEach(function(action) {
-      if (q.changeset[action].way) {
+      if (q.changeset[action] && q.changeset[action].way) {
         actions.push(action);
       }
     });

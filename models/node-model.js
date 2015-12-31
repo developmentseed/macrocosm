@@ -8,8 +8,6 @@
  */
 
 var _ = require('lodash');
-var Boom = require('boom');
-var Promise = require('bluebird');
 
 var knex = require('../connection.js');
 var log = require('../services/log.js');
@@ -179,13 +177,13 @@ var Node = {
     var actions = [];
     var model = this;
     ['create', 'modify', 'delete'].forEach(function(action) {
-      if (q.changeset[action].node) {
+      if (q.changeset[action] && q.changeset[action].node) {
         actions.push(action);
       }
     });
-    return Promise.map(actions, function(action) {
+    return Promise.all(actions.map(function(action) {
       return model[action](q);
-    })
+    }))
     .catch(function(err) {
       log.error('Node changeset fails', err);
       throw new Error(err);
@@ -237,9 +235,9 @@ var Node = {
       if (tags.length) {
         tags = [].concat.apply([], tags);
 
-        return Promise.map(Chunk(tags), function(tags) {
+        return Promise.all(Chunk(tags).map(function(tags) {
           return q.transaction(NodeTag.tableName).insert(tags)
-        }, {concurrency: 1})
+        }))
 
         .catch(function(err) {
           log.error('Creating node tags in create', err);
@@ -249,9 +247,9 @@ var Node = {
       return [];
     }
 
-    return Promise.map(Chunk(models), function(models) {
+    return Promise.all(Chunk(models).map(function(models) {
       return q.transaction(Node.tableName).insert(models).returning('id');
-    }, {concurrency: 1})
+    }))
     .then(remap)
     .then(saveTags)
     .catch(function(err) {
@@ -272,10 +270,10 @@ var Node = {
       return q.transaction(NodeTag.tableName).whereIn('node_id', ids).del();
     }
 
-    return Promise.map(raw, function(entity) {
+    return Promise.all(raw.map(function(entity) {
       return q.transaction(Node.tableName).where({id: entity.id})
         .update(Node.fromEntity(entity, q.meta));
-    })
+    }))
     .then(deleteTags)
     .then(function () {
       var tags = [];

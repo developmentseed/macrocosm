@@ -107,13 +107,13 @@ function updateChangeset(meta, changeset) {
   var numChanges = parseInt(meta.num_changes, 10) || 0;
   var nodes = [];
   ['create', 'modify', 'delete'].forEach(function(action) {
-    if (changeset[action].node) {
+    if (changeset[action] && changeset[action].node) {
       nodes = nodes.concat(changeset[action].node);
     }
     ['node', 'way', 'relation'].forEach(function(entity) {
-      if (Array.isArray(changeset[action][entity])) {
+      if (changeset[action] && Array.isArray(changeset[action][entity])) {
         numChanges += changeset[action][entity].length;
-      } else if (changeset[action][entity] != null) {
+      } else if (changeset[action] && changeset[action][entity] != null) {
         // not null, but not an array either, so assume this is a single entry
         numChanges += 1;
       }
