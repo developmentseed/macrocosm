@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "The OSM API as a platform in NodeJS",
   "main": "index.js",
-  "engine": "node 4.0.0",
+  "engines": {
+    "node": "^5.0.0"
+  },
   "scripts": {
     "start": "node index.js",
     "test": "MACROCOSM_DEBUG=true mocha --recursive",
