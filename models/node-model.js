@@ -213,6 +213,11 @@ var Node = {
         // update the new node id on the changeset
         // TODO is this step necessary?
         entity.id = ids[i];
+
+        if (!Array.isArray(entity.tag)) {
+          entity.tag = [entity.tag];
+        }
+
         // Check for Node tags. If they exist, they will be in the form of an array.
         if (entity.tag && entity.tag.length) {
           tags.push(entity.tag.map(function(t) {
