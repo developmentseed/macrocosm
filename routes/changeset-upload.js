@@ -96,7 +96,7 @@ function _upload(meta, changeset) {
         // https://github.com/tgriesser/knex/issues/362
 
         log.error('Changeset update fails', err);
-        return res(Boom.badImplementation('Could not update changeset'));
+        throw Boom.badImplementation('Could not update changeset');
       });
   });
 }
