@@ -4,7 +4,6 @@ var Boom = require('boom');
 var knex = require('../connection.js');
 var queryBbox = require('../services/query-bbox.js');
 var XML = require('../services/xml.js');
-var Node = require('../models/node-model.js');
 var BoundingBox = require('../services/bounding-box.js');
 
 module.exports = {
@@ -49,11 +48,11 @@ module.exports = {
     }
 
     queryBbox(knex, bbox)
-    .then(function (result) {
+    .then(function(result) {
       var xmlDoc = XML.write({
         bbox: bbox,
-        nodes: Node.withTags(result.nodes, result.nodetags, 'node_id'),
-        ways: Node.withTags(result.ways, result.waytags, 'way_id'),
+        nodes: result.nodes,
+        ways: result.ways,
         relations: result.relations
       });
       var response = res(xmlDoc.toString());
