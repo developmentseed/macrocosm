@@ -24,7 +24,7 @@ server.connection({ port: process.env.PORT || 4000 });
 
 
 server.ext('onRequest', function(req, res) {
-  debug('href: %s', req.url.href);
+  debug('%s %s', req.method.toUpperCase(), req.url.href);
   return res.continue();
 });
 
@@ -40,7 +40,7 @@ server.register({
 
 server.ext('onPostAuth', function(req, res) {
   if (req.mime === 'text/xml' && Object.keys(req.payload || {}).length > 0) {
-    debug('payload: %s', req.payload);
+    debug(req.payload);
     req.payload = xml2json.toJson(req.payload, {
       object: true
     });
