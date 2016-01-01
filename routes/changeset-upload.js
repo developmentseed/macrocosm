@@ -39,6 +39,12 @@ function upload(req, res) {
     })
 
     .then(function(changeObject) {
+      /* TODO
+       * <diffResult generator="OpenStreetMap Server" version="0.6">
+       *   <node|way|relation old_id="#" new_id="#" new_version="#"/>
+       *   ...
+       * </diffResult>
+      */
       return res(changeObject);
     })
 
