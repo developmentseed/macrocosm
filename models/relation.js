@@ -7,9 +7,7 @@
  */
 
 var _ = require('lodash');
-var Boom = require('boom');
 
-var knex = require('../connection.js');
 var Member = require('./relation-member.js');
 var RelationTag = require('./relation-tag.js');
 var log = require('../services/log');
