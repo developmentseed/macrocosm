@@ -149,6 +149,10 @@ var Relation = {
   create: function(q) {
     var raw = q.changeset.create.relation;
 
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
     var models = raw.map(function(entity) {
       return Relation.fromEntity(entity, q.meta);
     });
@@ -199,6 +203,11 @@ var Relation = {
   // to see if any relation is a part of any other relation.
   'delete': function(q) {
     var raw = q.changeset['delete'].relation;
+
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
     var ids = _.pluck(raw, 'id');
 
     return q.transaction(Relation.tableName).whereIn('id', ids)
