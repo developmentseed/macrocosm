@@ -137,89 +137,97 @@ function updateChangeset(meta, changeset) {
   return newChangeset;
 }
 
-module.exports = {
-  /**
-   * @api {POST} /changeset/:id/upload Upload changeset data
-   * @apiGroup Changeset
-   * @apiName UploadChangeset
-   * @apiDescription Upload JSON Changeset Data to given changeset
-   * Return the changeset and a bounding box that covers the location of its
-   * edits.
-   *
-   * The OSM Change JSON Format is the of the form
-   * <pre><code>
-   * {  <br>
-   *   "version": 0.1, <br>
-   *   "generator": "iD", <br>
-   *   "create": {},  <br>
-   *   "modify": {},  <br>
-   *   "delete": {}, <br>
-   * }
-   *</code></pre>
-   *
-   * Each of the create, modify and delete blocks can contain entities such as Node, Way
-   * or Relation. Check the API Usage Example for more detail.
-   * @apiVersion 0.1.0
-   *
-   * @apiParam {Number} id Changeset ID
-   * @apiParam {Object} osmChange OSM Changeset Data in JSON
-   *
-   * @apiSuccess {Object} changeset Changeset object
-   * @apiSuccess {String} changeset.id Changeset ID.
-   * @apiSuccess {String} changeset.user_id Changeset User ID.
-   * @apiSuccess {Date} changeset.created_at Changeset Date of creation.
-   * @apiSuccess {Number} changeset.min_lat Min Latitude of bounding box.
-   * @apiSuccess {Number} changeset.max_lat Max Latitude of bounding box.
-   * @apiSuccess {Number} changeset.min_lon Min Longitude of bounding box.
-   * @apiSuccess {Number} changeset.max_lon Max Longitude of bounding box.
-   * @apiSuccess {Date} changeset.closed_at Changeset Date of creation.
-   * @apiSuccess {number} changeset.num_changes Number of edits in this changeset.
-   *
-   * @apiExample {curl} Example Usage:
-   *  curl -d '{
-   *   "osmChange": {
-   *     "version":0.1,
-   *     "generator":"openroads-iD",
-   *     "create":{ },
-   *     "modify":{
-   *       "node":[
-   *         {"id":"21851",
-   *          "lon":123.9780018,
-   *          "lat":9.7923478,"version":"1", "tag":[],
-   *          "changeset":1 }]
-   *     },
-   *     "delete": {}
-   *   }
-   *  }' -H 'Content-Type: application/json' http://localhost:4000/changeset/1/upload
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *  {
-   *  "changeset":
-   *    {
-   *     "id":"1",
-   *     "user_id":"2254600",
-   *     "created_at":"2015-03-13T03:51:39.000Z",
-   *     "min_lat":97923478,
-   *     "max_lat":97923478,
-   *     "min_lon":1239780018,
-   *     "max_lon":1239780018,
-   *     "closed_at":"2015-04-21T18:44:51.858Z",
-   *     "num_changes":31076
-   *     },
-   *  "created":
-   *    {
-   *     "node":{
-   *       "-1":"743049",
-   *       "-2":"743050",
-   *       "-3":"743051"
-   *       },
-   *     "way":{
-   *       "-1":"168483"
-   *       }
-   *     }
-   *   }
-   */
-  method: 'POST',
-  path: '/api/0.6/changeset/{changesetID}/upload',
-  handler: upload
-};
+module.exports = [
+  {
+    /**
+     * @api {POST} /changeset/:id/upload Upload changeset data
+     * @apiGroup Changeset
+     * @apiName UploadChangeset
+     * @apiDescription Upload JSON Changeset Data to given changeset
+     * Return the changeset and a bounding box that covers the location of its
+     * edits.
+     *
+     * The OSM Change JSON Format is the of the form
+     * <pre><code>
+     * {  <br>
+     *   "version": 0.1, <br>
+     *   "generator": "iD", <br>
+     *   "create": {},  <br>
+     *   "modify": {},  <br>
+     *   "delete": {}, <br>
+     * }
+     *</code></pre>
+     *
+     * Each of the create, modify and delete blocks can contain entities such as Node, Way
+     * or Relation. Check the API Usage Example for more detail.
+     * @apiVersion 0.1.0
+     *
+     * @apiParam {Number} id Changeset ID
+     * @apiParam {Object} osmChange OSM Changeset Data in JSON
+     *
+     * @apiSuccess {Object} changeset Changeset object
+     * @apiSuccess {String} changeset.id Changeset ID.
+     * @apiSuccess {String} changeset.user_id Changeset User ID.
+     * @apiSuccess {Date} changeset.created_at Changeset Date of creation.
+     * @apiSuccess {Number} changeset.min_lat Min Latitude of bounding box.
+     * @apiSuccess {Number} changeset.max_lat Max Latitude of bounding box.
+     * @apiSuccess {Number} changeset.min_lon Min Longitude of bounding box.
+     * @apiSuccess {Number} changeset.max_lon Max Longitude of bounding box.
+     * @apiSuccess {Date} changeset.closed_at Changeset Date of creation.
+     * @apiSuccess {number} changeset.num_changes Number of edits in this changeset.
+     *
+     * @apiExample {curl} Example Usage:
+     *  curl -d '{
+     *   "osmChange": {
+     *     "version":0.1,
+     *     "generator":"openroads-iD",
+     *     "create":{ },
+     *     "modify":{
+     *       "node":[
+     *         {"id":"21851",
+     *          "lon":123.9780018,
+     *          "lat":9.7923478,"version":"1", "tag":[],
+     *          "changeset":1 }]
+     *     },
+     *     "delete": {}
+     *   }
+     *  }' -H 'Content-Type: application/json' http://localhost:4000/changeset/1/upload
+     *
+     * @apiSuccessExample {json} Success-Response:
+     *  {
+     *  "changeset":
+     *    {
+     *     "id":"1",
+     *     "user_id":"2254600",
+     *     "created_at":"2015-03-13T03:51:39.000Z",
+     *     "min_lat":97923478,
+     *     "max_lat":97923478,
+     *     "min_lon":1239780018,
+     *     "max_lon":1239780018,
+     *     "closed_at":"2015-04-21T18:44:51.858Z",
+     *     "num_changes":31076
+     *     },
+     *  "created":
+     *    {
+     *     "node":{
+     *       "-1":"743049",
+     *       "-2":"743050",
+     *       "-3":"743051"
+     *       },
+     *     "way":{
+     *       "-1":"168483"
+     *       }
+     *     }
+     *   }
+     */
+    method: 'POST',
+    path: '/changeset/{changesetID}/upload',
+    handler: upload
+  },
+  {
+    method: 'POST',
+    path: '/api/0.6/changeset/{changesetID}/upload',
+    handler: upload
+
+  }
+];
