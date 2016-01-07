@@ -1,7 +1,7 @@
 'use strict';
 
 var fs = require('fs');
-var libxml = require('libxmljs');
+var parser = require('xml2json');
 
 function request (bbox) {
   return {
@@ -39,13 +39,14 @@ describe('map endpoint', function () {
 
   it('yields an empty response when the given bounding box is empty',
   function (done) {
-    var expected = '<?xml version="1.0" encoding="UTF-8"?>\n<osm version="6" generator="DevelopmentSeed">\n  <bounds minlat="-0.1" minlon="-0.1" maxlat="0.1" maxlon="0.1"/>\n</osm>\n';
-
     server.injectThen(request('-0.1,-0.1,0.1,0.1'))
     .then(function (res) {
       res.statusCode.should.equal(200);
-      res.payload.should.equal(expected);
-
+      var _res = parser.toJson(res.payload, {
+        arrayNotation: true,
+        object: true
+      });
+      _res.osm.should.have.length(1);
       done();
     })
     .catch(function (err) {
