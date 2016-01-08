@@ -29,14 +29,15 @@ describe('changeset create endpoint', function () {
       payload: {
         uid: 99,
         user: 'openroads',
-        comment: 'test comment'
+        comment: 'test comment',
+        osm: {changeset: {}}
       }
     })
     .then(function (res) {
       res.statusCode.should.eql(200);
-      var result = JSON.parse(res.payload);
-      result.id.should.be.within(0, Number.MAX_VALUE);
-      changesets.push(result.id);
+      var id = +res.payload;
+      (id).should.be.within(0, Number.MAX_VALUE);
+      changesets.push(id);
       done();
     })
     .catch(function (err) {
@@ -51,20 +52,19 @@ describe('changeset create endpoint', function () {
       payload: {
         uid: 1337,
         user: 'openroads test user',
-        comment: 'test comment'
+        comment: 'test comment',
+        osm: {changeset: {}}
       }
     })
     .then(function (res) {
       res.statusCode.should.eql(200);
-      var result = JSON.parse(res.payload);
-      result.id.should.be.within(0, Number.MAX_VALUE);
-      changesets.push(result.id);
+      var id = +res.payload;
+      id.should.be.within(0, Number.MAX_VALUE);
+      changesets.push(id);
       done();
     })
     .catch(function (err) {
       return done(err);
     });
-
   });
-
 });
