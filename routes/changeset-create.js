@@ -51,20 +51,21 @@ function changesetCreate(req, res) {
       if(ids.length < 1) {
         throw new Error('Could not add changeset to database.');
       }
-
       return ids[0];
     }).then(function(id) {
-      var tags = changeset.tag.map(function(tag) {
-        tag.changeset_id = id;
-
-        return tag;
-      });
-
-      return knex('changeset_tags')
-      .insert(tags)
-      .then(function() {
+      if (!changeset.tag) {
         return res(id).type('text/plain');
-      });
+      } else {
+        var tags = changeset.tag.map(function (tag) {
+          tag.changeset_id = id;
+          return tag;
+        })
+        return knex('changeset_tags')
+        .insert(tags)
+        .then(function() {
+          return res(id).type('text/plain');
+        });
+      }
     });
   }).catch(function (err) {
     console.log(err);
