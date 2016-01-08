@@ -60,32 +60,39 @@ describe('XML', function() {
   describe('#write', function() {
 
     it('Should correctly write tags to nodes', function() {
-      var nodes = [{
+      var node = new mock.Node({
         tags: [{ k: 1, v: 1 }]
-      }];
-      var xml = XML.write({ nodes: nodes }).toString();
+      });
+      var xml = XML.write({ nodes: [node.entity] }).toString();
       var doc = libxml.parseXmlString(xml);
       doc.get('//tag').toString().should.eql('<tag k="1" v="1"/>');
     });
 
     it('Should correctly write tags to ways', function() {
-      var ways = [{
+      var way = new mock.Way({
         tags: [{ k: 1, v: 1 }],
         nodes: []
-      }];
-      var xml = XML.write({ ways: ways }).toString();
+      });
+      var xml = XML.write({ ways: [way.entity] }).toString();
       var doc = libxml.parseXmlString(xml);
       doc.get('//tag').toString().should.eql('<tag k="1" v="1"/>');
     });
 
     it('Writes tags to relations', function() {
-      var relations = [{
+      var relation = new mock.Relation({
         tags: [{ k: 1, v: 1}],
         members: []
-      }];
-      var xml = XML.write({ relations: relations }).toString();
+      });
+      var xml = XML.write({ relations: [relation.entity] }).toString();
       var doc = libxml.parseXmlString(xml);
       doc.get('//tag').toString().should.eql('<tag k="1" v="1"/>');
+    });
+
+    it('Throws error if entity has no timestamp', function () {
+      var node = { changeset: 1 };
+      (function () {
+        XML.write({ nodes: [node] });
+      }).should.throw();
     });
   });
 });
