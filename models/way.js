@@ -14,6 +14,7 @@ var log = require('../services/log.js');
 var Chunk = require('../services/chunk.js');
 var WayNode = require('./way-node.js');
 var WayTag = require('./way-tag.js');
+var validateArray = require('../util/validate-array');
 
 var Way = {
   tableName: 'current_ways',
@@ -179,8 +180,9 @@ var Way = {
           };
         }));
         // Check if tags are present, and if so, save them.
-        if (entity.tag && entity.tag.length) {
-          tags.push(entity.tag.map(function(tag) {
+        if (entity.tag) {
+          var _tags = validateArray(entity.tag);
+          tags.push(_tags.map(function(tag) {
             return {
               k: tag.k,
               v: tag.v,
@@ -197,7 +199,7 @@ var Way = {
       .then(function() {
         if (tags.length) {
           tags = [].concat.apply([], tags);
-          return Promise.map(Chunk(tags).map(function(t) {
+          return Promise.all(Chunk(tags).map(function(t) {
             return q.transaction(WayTag.tableName).insert(t);
           }));
         }

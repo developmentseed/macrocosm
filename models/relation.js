@@ -12,6 +12,8 @@ var Member = require('./relation-member.js');
 var RelationTag = require('./relation-tag.js');
 var log = require('../services/log');
 
+var validateArray = require('../util/validate-array');
+
 var Relation = {
 
   tableName: 'current_relations',
@@ -77,8 +79,9 @@ var Relation = {
     raw.forEach(function(entity, i) {
 
       var id = ids[i];
-      if (entity.tag && entity.tag.length) {
-        tags.push(entity.tag.map(function(tag) {
+      if (entity.tag) {
+        var _tags = validateArray(entity.tag);
+        tags.push(_tags.map(function(tag) {
           return {
             k: tag.k,
             v: tag.v,
@@ -87,8 +90,9 @@ var Relation = {
         }));
       }
 
-      if (entity.member && entity.member.length) {
-        members.push(entity.member.map(function(member, i) {
+      if (entity.member) {
+        var _members = validateArray(entity.member);
+        members.push(_members.map(function(member, i) {
 
           // We can use the map variable to get the newly-created entity ID
           // if the one that came from the editor is a negative value.
@@ -145,11 +149,7 @@ var Relation = {
   },
 
   create: function(q) {
-    var raw = q.changeset.create.relation;
-
-    if (!Array.isArray(raw)) {
-      raw = [raw];
-    }
+    var raw = validateArray(q.changeset.create.relation);
 
     var models = raw.map(function(entity) {
       return Relation.fromEntity(entity, q.meta);

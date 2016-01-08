@@ -17,6 +17,7 @@ var Chunk = require('../services/chunk.js');
 var NodeTag = require('./node-tag.js');
 var WayNode = require('./way-node.js');
 var Way = require('./way.js');
+var validateArray = require('../util/validate-array');
 
 var Node = {
 
@@ -212,13 +213,10 @@ var Node = {
         // TODO is this step necessary?
         entity.id = ids[i];
 
-        if (!Array.isArray(entity.tag)) {
-          entity.tag = [entity.tag];
-        }
-
-        // Check for Node tags. If they exist, they will be in the form of an array.
-        if (entity.tag && entity.tag.length) {
-          tags.push(entity.tag.map(function(t) {
+        // Check for Node tags, and validate as array.
+        if (entity.tag) {
+          var _tags = validateArray(entity.tag);
+          tags.push(_tags.map(function(t) {
             return {
               k: t.k,
               v: t.v,
