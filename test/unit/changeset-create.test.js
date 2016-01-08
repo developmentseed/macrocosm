@@ -7,10 +7,11 @@ describe('changeset create endpoint', function () {
   after(function (done) {
     // Delete newly created changesets.
     knex.transaction(function(transaction) {
+      console.log(changesets);
       return transaction('changesets').whereIn('id', changesets).del().returning('*')
         .then(function(deleted) {
           console.log(deleted.length, 'changesets deleted');
-          return transaction('users').whereIn('id', [99, 1337]).del().returning('*');
+          return transaction('users').whereIn('id', [99]).del().returning('*');
         })
         .then(function(deleted) {
           console.log(deleted.length, 'users deleted');
@@ -37,29 +38,6 @@ describe('changeset create endpoint', function () {
       res.statusCode.should.eql(200);
       var id = +res.payload;
       (id).should.be.within(0, Number.MAX_VALUE);
-      changesets.push(id);
-      done();
-    })
-    .catch(function (err) {
-      return done(err);
-    });
-  });
-
-  it('creates a user with the given id if one does not exist', function (done) {
-    server.injectThen({
-      method: 'PUT',
-      url: '/changeset/create',
-      payload: {
-        uid: 1337,
-        user: 'openroads test user',
-        comment: 'test comment',
-        osm: {changeset: {}}
-      }
-    })
-    .then(function (res) {
-      res.statusCode.should.eql(200);
-      var id = +res.payload;
-      id.should.be.within(0, Number.MAX_VALUE);
       changesets.push(id);
       done();
     })
