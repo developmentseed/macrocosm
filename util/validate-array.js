@@ -1,4 +1,4 @@
-module.exports = function (val) {
+module.exports = function(val) {
   if (val != null && !Array.isArray(val)) {
     return [val];
   }
