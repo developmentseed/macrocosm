@@ -1,3 +1,7 @@
 module.exports = function (val) {
-  return Array.isArray(val) ? val : [val];
+  if (val != null && !Array.isArray(val)) {
+    return [val];
+  }
+
+  return val;
 }
