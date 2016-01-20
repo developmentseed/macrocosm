@@ -1,7 +1,8 @@
 'use strict';
 
-var fs = require('fs');
 var parser = require('xml2json');
+
+var server = require('../bootstrap.test');
 
 function request (bbox) {
   return {

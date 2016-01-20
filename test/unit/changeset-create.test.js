@@ -1,5 +1,6 @@
 'use strict';
 var knex = require('../../connection.js');
+var server = require('../bootstrap.test');
 
 var changesets = [];
 

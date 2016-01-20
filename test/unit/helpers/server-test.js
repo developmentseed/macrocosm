@@ -1,5 +1,6 @@
 'use strict';
 var knex = require('../../../connection');
+var server = require('../../bootstrap.test');
 
 module.exports.createGet = function createGet(base) {
   return function(url) {
