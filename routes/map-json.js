@@ -13,14 +13,14 @@ module.exports = {
    * @apiGroup bbox
    * @apiName Map
    * @apiVersion 0.1.0
-   * 
+   *
    * @apiParam {Number[4]} bbox [min_lon, min_lat, max_lon, max_lat]
-   * 
+   *
    * @apiSuccess {GeoJSON} FeatureCollection List of OSM Roads
    *
-   * @apiExample {curl} Example Usage: 
+   * @apiExample {curl} Example Usage:
    *    curl http://localhost:4000/map?bbox=123.81042480468751,9.584500864717155,123.81591796875,9.58991730708743
-   *  
+   *
    * @apiSuccessExample {json} Success-Response:
    *  {
    *    "type": "FeatureCollection",
@@ -42,7 +42,7 @@ module.exports = {
    *          "coordinates": [[123.8149137,9.5920337],
    *            ...
    *          ]}
-   *      }, 
+   *      },
    *    ...]
    *  }
    */

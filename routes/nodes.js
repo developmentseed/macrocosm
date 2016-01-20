@@ -71,7 +71,7 @@ module.exports = [
       var ids = req.query.nodes.split(',').map(Number);
 
       if (ids.length === 0) {
-        return res(Boom.badRequest('IDs must be provided.'))
+        return res(Boom.badRequest('IDs must be provided.'));
       }
 
       Promise.all([

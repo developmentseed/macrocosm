@@ -15,7 +15,7 @@ module.exports = [
       var ids = req.query.ways.split(',').map(Number);
 
       if (ids.length === 0) {
-        return res(Boom.badRequest('IDs must be provided.'))
+        return res(Boom.badRequest('IDs must be provided.'));
       }
 
       queryWays(knex, ids)
