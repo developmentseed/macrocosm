@@ -1,6 +1,6 @@
 'use strict';
 var libxml = require('libxmljs');
-var _ = require('lodash');
+require('should');
 var XML = require('../../services/xml.js');
 
 var jsonChangeset = require('./fixtures/xml-read.js').osmChange;
