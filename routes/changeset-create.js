@@ -76,7 +76,7 @@ function changesetCreate(req, res) {
       return res(id).type('text/plain');
     })
     .catch(function (err) {
-      console.log(err);
+      console.log(err.stack);
       return res(Boom.wrap(err));
     });
 }
