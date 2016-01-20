@@ -55,7 +55,7 @@ function changesetCreate(req, res) {
           return ids[0];
         })
         .then(function(id) {
-          if (changeset.tag.length === 0) {
+          if (changeset.tag == null || changeset.tag.length === 0) {
             return id;
           }
 
