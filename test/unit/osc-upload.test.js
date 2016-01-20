@@ -1,5 +1,6 @@
 'use strict';
 var fs = require('fs');
+var server = require('../bootstrap.test');
 var serverTest = require('./helpers/server-test');
 
 var testChangeset = new serverTest.testChangeset();
