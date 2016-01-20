@@ -153,7 +153,7 @@ var xml = {
       way.nodes.forEach(function(nd) {
         wayEl.node('nd').attr({
           ref: nd.id
-        })
+        });
       });
 
       // Attach way tags
@@ -185,7 +185,7 @@ var xml = {
           type: member.member_type.toLowerCase(),
           ref: member.member_id,
           role: member.member_role
-        })
+        });
       });
 
       // Attach relation tags.

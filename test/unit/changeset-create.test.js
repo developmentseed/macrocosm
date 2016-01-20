@@ -16,7 +16,7 @@ describe('changeset create endpoint', function () {
         })
         .then(function(deleted) {
           console.log(deleted.length, 'users deleted');
-        })
+        });
     })
     .then(function() {
       return done();

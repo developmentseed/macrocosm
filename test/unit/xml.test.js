@@ -17,7 +17,7 @@ var mock = {
 };
 
 function jsonRmTimes(entity) {
-  entity.timestamp = ''
+  entity.timestamp = '';
   return entity;
 }
 

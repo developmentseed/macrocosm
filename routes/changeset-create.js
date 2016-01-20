@@ -23,20 +23,21 @@ function changesetCreate(req, res) {
   knex('users')
     .where('id', uid)
     .then(function(users) {
-      if (users.length > 0)
+      if (users.length > 0) {
         return uid;
+      }
 
       return knex('users')
-      .insert({
-        id: uid,
-        display_name: userName,
-        // TODO: we aren't using the following fields; they're just here to
-        // cooperate w the database schema.
-        email: uid + '@openroads.org',
-        pass_crypt: '00000000000000000000000000000000',
-        data_public: true,
-        creation_time: new Date()
-      });
+        .insert({
+          id: uid,
+          display_name: userName,
+          // TODO: we aren't using the following fields; they're just here to
+          // cooperate w the database schema.
+          email: uid + '@openroads.org',
+          pass_crypt: '00000000000000000000000000000000',
+          data_public: true,
+          creation_time: new Date()
+        });
     })
     .then(function () {
       // TODO do this in a transaction
@@ -62,7 +63,7 @@ function changesetCreate(req, res) {
           var tags = changeset.tag.map(function(tag) {
             tag.changeset_id = id;
             return tag;
-          })
+          });
 
           return knex('changeset_tags')
             .insert(tags)
