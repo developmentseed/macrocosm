@@ -1,8 +1,6 @@
 'use strict';
 var Boom = require('boom');
 var knex = require('../connection.js');
-var log = require('../services/log.js');
-var Promise = require('bluebird');
 
 module.exports = [
   /**
@@ -12,7 +10,7 @@ module.exports = [
    * @apiVersion 0.1.0
    *
    * @apiParam {Number} id Relation ID.
-   * 
+   *
    * @apiSuccess {Object} relation Relation
    * @apiSuccess {String} relation.id     Relation id.
    * @apiSuccess {String} relation.timestamp   Relation creation date.
@@ -25,7 +23,7 @@ module.exports = [
    * @apiSuccess {Object} relation.members.member_role  Member role
    * @apiSuccess {Object} relation.members.sequence_id  Order of member within relation
    *
-   * @apiExample {curl} Example Usage: 
+   * @apiExample {curl} Example Usage:
    *    curl http://localhost:4000/relations/260
    *
    * @apiSuccessExample {json} Success-Response:
@@ -81,11 +79,11 @@ module.exports = [
    * @apiSuccess {String} relations.visible   Whether entity can be rendered.
    * @apiSuccess {Object[]} relations.tags   Tags associated to this relation.
    *
-   * @apiExample {curl} Querying by member: 
+   * @apiExample {curl} Querying by member:
    *    curl http://localhost:4000/relations?member=168329
-   * @apiExample {curl} Querying by tag: 
+   * @apiExample {curl} Querying by tag:
    *    curl http://localhost:4000/relations?test=relation_endpoint
-   *   
+   *
    * @apiSuccessExample {json} Success-Response:
    *  [
    *    {

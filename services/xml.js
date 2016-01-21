@@ -1,9 +1,15 @@
 'use strict';
+
+var util = require('util');
+
 var libxml = require('libxmljs');
 var _ = require('lodash');
+
+var meta = require('../package.json');
+
+var GENERATOR = util.format('%s (v%s)', meta.name, meta.version);
 var RATIO = require('./ratio');
 
-var log = require('../services/log.js');
 var Node = require('../models/node-model.js');
 var Way = require('../models/way.js');
 
@@ -91,7 +97,7 @@ var xml = {
 
   writeDoc: function() {
     var doc = new libxml.Document();
-    doc.node('osm').attr({ version: 6, generator: 'DevelopmentSeed' });
+    doc.node('osm').attr({ version: 0.6, generator: GENERATOR });
     return doc;
   },
 
@@ -113,7 +119,7 @@ var xml = {
         visible: node.visible,
         version: node.version,
         changeset: node.changeset_id,
-        timestamp: node.timestamp,
+        timestamp: node.timestamp.toISOString(),
         user: 'DevelopmentSeed',
         uid: 1,
         lat: node.latitude / RATIO,
@@ -139,26 +145,16 @@ var xml = {
         visible: way.visible,
         version: way.version,
         changeset: way.changeset_id,
-        timestamp: way.timestamp,
+        timestamp: way.timestamp.toISOString(),
         user: 'DevelopmentSeed',
         uid: 1
       });
 
-      // Use the sequence ID to make sure nodes are ordered correctly.
-      var wayNodes = way.nodes;
-      var ordered = [];
-      for (var j = 0, jj = wayNodes.length; j < jj; ++j) {
-        var wayNode = wayNodes[j];
-        ordered[parseInt(wayNode.sequence_id, 10)] = wayNode.node_id;
-      }
-
-      // Attach a node ref for each node, as long as it exists and it's id isn't '0'.
-      for (var k = 0, kk = ordered.length; k < kk; ++k) {
-        var wayNode = ordered[k];
-        if (wayNode && wayNode !== '0') {
-          wayEl.node('nd').attr({ ref: wayNode });
-        }
-      }
+      way.nodes.forEach(function(nd) {
+        wayEl.node('nd').attr({
+          ref: nd.id
+        });
+      });
 
       // Attach way tags
       var tags = way.tags;
@@ -179,30 +175,18 @@ var xml = {
         visible: relation.visible,
         version: relation.version,
         changeset: relation.changeset_id,
-        timestamp: relation.timestamp,
+        timestamp: relation.timestamp.toISOString(),
         user: 'DevelopmentSeed',
         uid: 1
       });
 
-      // Use the sequence ID to make sure members are ordered correctly.
-      var members = relation.members;
-      var ordered = [];
-      for (var j = 0, jj = members.length; j < jj; ++j) {
-        var member = members[j];
-        ordered[parseInt(member.sequence_id, 10)] = member;
-      }
-
-      // Attach members that exist.
-      for (var k = 0, kk = ordered.length; k < kk; ++k) {
-        var member = ordered[k];
-        if (member) {
-          relationEl.node('member').attr({
-            type: member.member_type.toLowerCase(),
-            ref: member.member_id,
-            role: member.member_role
-          });
-        }
-      }
+      relation.members.forEach(function(member) {
+        relationEl.node('member').attr({
+          type: member.member_type.toLowerCase(),
+          ref: member.member_id,
+          role: member.member_role
+        });
+      });
 
       // Attach relation tags.
       var tags = relation.tags;
@@ -217,4 +201,3 @@ var xml = {
 };
 
 module.exports = xml;
-

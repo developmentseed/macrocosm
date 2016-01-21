@@ -9,15 +9,12 @@
 */
 
 var _ = require('lodash');
-var Boom = require('boom');
-var Promise = require('bluebird');
 
-var knex = require('../connection.js');
 var log = require('../services/log.js');
 var Chunk = require('../services/chunk.js');
-var Node = require('./node-model.js');
 var WayNode = require('./way-node.js');
 var WayTag = require('./way-tag.js');
+var validateArray = require('../util/validate-array');
 
 var Way = {
   tableName: 'current_ways',
@@ -135,13 +132,13 @@ var Way = {
     var actions = [];
     var model = this;
     ['create', 'modify', 'delete'].forEach(function(action) {
-      if (q.changeset[action].way) {
+      if (q.changeset[action] && q.changeset[action].way) {
         actions.push(action);
       }
     });
-    return Promise.map(actions, function(action) {
+    return Promise.all(actions.map(function(action) {
       return model[action](q);
-    })
+    }))
     .catch(function(err) {
       log.error('Way changeset fails', err);
       throw new Error(err);
@@ -152,12 +149,16 @@ var Way = {
 
     var raw = q.changeset.create.way;
 
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
     // Create a list of models of just way creations with proper attributes.
     var models = raw.map(function(entity) { return Way.fromEntity(entity, q.meta); });
 
-    return Promise.map(Chunk(models), function(models) {
+    return Promise.all(Chunk(models).map(function(models) {
       return q.transaction(Way.tableName).insert(models).returning('id');
-    }, {concurrency: 1})
+    }))
     .then(function(_ids) {
       var ids = [].concat.apply([], _ids);
       log.info('Remapping', ids.length, 'way IDs');
@@ -179,8 +180,9 @@ var Way = {
           };
         }));
         // Check if tags are present, and if so, save them.
-        if (entity.tag && entity.tag.length) {
-          tags.push(entity.tag.map(function(tag) {
+        if (entity.tag) {
+          var _tags = validateArray(entity.tag);
+          tags.push(_tags.map(function(tag) {
             return {
               k: tag.k,
               v: tag.v,
@@ -191,15 +193,15 @@ var Way = {
       });
 
       wayNodes = [].concat.apply([], wayNodes);
-      return Promise.map(Chunk(wayNodes), function(wn) {
+      return Promise.all(Chunk(wayNodes).map(function(wn) {
         return q.transaction(WayNode.tableName).insert(wn);
-      }, {concurrency: 1})
+      }))
       .then(function() {
         if (tags.length) {
           tags = [].concat.apply([], tags);
-          return Promise.map(Chunk(tags), function(t) {
+          return Promise.all(Chunk(tags).map(function(t) {
             return q.transaction(WayTag.tableName).insert(t);
-          }, {concurrency: 1});
+          }));
         }
         return [];
 
@@ -214,10 +216,14 @@ var Way = {
   modify: function(q) {
     var raw = q.changeset.modify.way;
 
-    return Promise.map(raw, function(entity) {
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
+    return Promise.all(raw.map(function(entity) {
       var model = Way.fromEntity(entity, q.meta);
       return q.transaction(Way.tableName).where({ id: entity.id }).update(model)
-    })
+    }))
 
     // Delete old wayNodes and wayTags
     .then(function() {

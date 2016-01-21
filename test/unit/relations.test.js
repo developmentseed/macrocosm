@@ -33,25 +33,25 @@ describe('Relations endpoint', function() {
   before('Create changeset', function (done) {
     testChangeset.create()
       .then(function (changesetId) {
-          var cs = new Change();
-          var nodes = makeNodes(changesetId, 5);
-          var way = new Way({id: -1, changeset: changesetId}).nodes(nodes);
-          var relation = new Relation({id: -1, changeset: changesetId})
-            .members('node', nodes)
-            .members('way', way)
-            .tags({ k: 'test', v: 'relation_endpoint' });
+        var cs = new Change();
+        var nodes = makeNodes(changesetId, 5);
+        var way = new Way({id: -1, changeset: changesetId}).nodes(nodes);
+        var relation = new Relation({id: -1, changeset: changesetId})
+          .members('node', nodes)
+          .members('way', way)
+          .tags({ k: 'test', v: 'relation_endpoint' });
 
-          cs.create('node', nodes)
-            .create('way', way)
-            .create('relation', relation);
+        cs.create('node', nodes)
+          .create('way', way)
+          .create('relation', relation);
 
-          testChangeset.upload(cs.get())
-            .then(function(res) {
-              ids.way = res.result.created.way['-1'];
-              ids.relation = res.result.created.relation['-1'];
-              return done();
-            })
-            .catch(done);
+        testChangeset.upload(cs.get())
+          .then(function(res) {
+            ids.way = res.result.created.way['-1'];
+            ids.relation = res.result.created.relation['-1'];
+            return done();
+          })
+          .catch(done);
       })
       .catch(done);
   });

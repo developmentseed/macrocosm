@@ -1,5 +1,6 @@
 'use strict';
 var knex = require('../../../connection');
+var server = require('../../bootstrap.test');
 
 module.exports.createGet = function createGet(base) {
   return function(url) {
@@ -16,7 +17,8 @@ module.exports.testChangeset = function testChangeset(uid, user, comment) {
   this.payload = {
     uid: uid || 99,
     user: user || 'openroads',
-    comment: comment || 'test comment'
+    comment: comment || 'test comment',
+    osm: {changeset: {}}
   };
 
   this.create = function create() {
@@ -28,10 +30,10 @@ module.exports.testChangeset = function testChangeset(uid, user, comment) {
     })
     .then(function (res) {
       res.statusCode.should.eql(200);
-      var result = JSON.parse(res.payload);
-      result.id.should.be.within(0, Number.MAX_VALUE); 
-      _self.changesetId = result.id;
-      return result.id;
+      var id = +res.payload;
+      id.should.be.within(0, Number.MAX_VALUE);
+      _self.changesetId = id;
+      return id;
     });
   };
 

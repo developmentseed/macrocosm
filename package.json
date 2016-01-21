@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "The OSM API as a platform in NodeJS",
   "main": "index.js",
-  "engine": "node 4.0.0",
+  "engines": {
+    "node": "^5.0.0"
+  },
   "scripts": {
     "start": "node index.js",
     "test": "MACROCOSM_DEBUG=true mocha --recursive",
@@ -31,17 +33,21 @@
   "homepage": "https://github.com/developmentseed/macrocosm",
   "dependencies": {
     "apidoc": "^0.12.3",
-    "bluebird": "^2.9.24",
     "boom": "^2.7.0",
+    "debug": "^2.2.0",
     "hapi": "^8.4.0",
     "hapi-router": "^3.0.1",
     "knex": "^0.7.6",
     "libxmljs": "^0.14.0",
     "lodash": "^3.6.0",
     "pg": "^4.3.0",
-    "winston": "^0.9.0"
+    "winston": "^0.9.0",
+    "xml2json": "^0.9.0",
+    "xmlbuilder": "^4.2.0"
   },
   "devDependencies": {
+    "babel-eslint": "^4.1.6",
+    "eslint": "^1.10.3",
     "inject-then": "^2.0.0",
     "mocha": "^2.2.1",
     "should": "^5.2.0",

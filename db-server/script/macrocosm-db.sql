@@ -1518,3 +1518,51 @@ INSERT INTO schema_migrations (version) VALUES ('20110322001319');
 INSERT INTO schema_migrations (version) VALUES ('20100516124737');
 
 INSERT INTO schema_migrations (version) VALUES ('20110925112722');
+
+INSERT INTO schema_migrations (version) VALUES ('20121005195010');
+
+INSERT INTO schema_migrations (version) VALUES ('20120318201948');
+
+INSERT INTO schema_migrations (version) VALUES ('20120214210114');
+
+INSERT INTO schema_migrations (version) VALUES ('20130328184137');
+
+INSERT INTO schema_migrations (version) VALUES ('20120404205604');
+
+INSERT INTO schema_migrations (version) VALUES ('20120328090602');
+
+INSERT INTO schema_migrations (version) VALUES ('20120208122334');
+
+INSERT INTO schema_migrations (version) VALUES ('53');
+
+INSERT INTO schema_migrations (version) VALUES ('54');
+
+INSERT INTO schema_migrations (version) VALUES ('20111212183945');
+
+INSERT INTO schema_migrations (version) VALUES ('55');
+
+INSERT INTO schema_migrations (version) VALUES ('56');
+
+INSERT INTO schema_migrations (version) VALUES ('57');
+
+INSERT INTO schema_migrations (version) VALUES ('20121203124841');
+
+INSERT INTO schema_migrations (version) VALUES ('20111116184519');
+
+INSERT INTO schema_migrations (version) VALUES ('20121012044047');
+
+INSERT INTO schema_migrations (version) VALUES ('20121202155309');
+
+INSERT INTO schema_migrations (version) VALUES ('20120808231205');
+
+INSERT INTO schema_migrations (version) VALUES ('20110508145337');
+
+INSERT INTO schema_migrations (version) VALUES ('20120123184321');
+
+INSERT INTO schema_migrations (version) VALUES ('20121119165817');
+
+INSERT INTO schema_migrations (version) VALUES ('20120219161649');
+
+INSERT INTO schema_migrations (version) VALUES ('20120208194454');
+
+INSERT INTO schema_migrations (version) VALUES ('20110521142405');

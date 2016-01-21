@@ -7,7 +7,8 @@ var newNode = function(attributes) {
     lon: 10,
     version: 0,
     id: -1,
-    changeset: 1
+    changeset: 1,
+    timestamp: new Date()
   };
   if (attributes) {
     entity = _.extend({}, entity, attributes);

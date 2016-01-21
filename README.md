@@ -79,3 +79,14 @@ npm run gendoc
 ```
 
 On a push to `master`, Travis builds the documentation and pushes it to Github Pages. The .js and .json files that are built by `npm run gendoc`, should not be committed to Github.
+
+## Importing data
+
+```bash
+createdb macrocosm
+psql -d macrocosm -f db-server/script/macrocosm-db.sql
+osmosis \
+  --read-pbf-fast delaware-latest.osm.pbf \
+  --log-progress \
+  --write-apidb database=macrocosm
+```

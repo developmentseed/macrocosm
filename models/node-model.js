@@ -8,8 +8,6 @@
  */
 
 var _ = require('lodash');
-var Boom = require('boom');
-var Promise = require('bluebird');
 
 var knex = require('../connection.js');
 var log = require('../services/log.js');
@@ -19,6 +17,7 @@ var Chunk = require('../services/chunk.js');
 var NodeTag = require('./node-tag.js');
 var WayNode = require('./way-node.js');
 var Way = require('./way.js');
+var validateArray = require('../util/validate-array');
 
 var Node = {
 
@@ -179,13 +178,13 @@ var Node = {
     var actions = [];
     var model = this;
     ['create', 'modify', 'delete'].forEach(function(action) {
-      if (q.changeset[action].node) {
+      if (q.changeset[action] && q.changeset[action].node) {
         actions.push(action);
       }
     });
-    return Promise.map(actions, function(action) {
+    return Promise.all(actions.map(function(action) {
       return model[action](q);
-    })
+    }))
     .catch(function(err) {
       log.error('Node changeset fails', err);
       throw new Error(err);
@@ -195,6 +194,10 @@ var Node = {
   create: function(q) {
 
     var raw = q.changeset.create.node;
+
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
 
     // Map each node creation to a model with proper attributes.
     var models = raw.map(function(entity) { return Node.fromEntity(entity, q.meta); });
@@ -209,9 +212,11 @@ var Node = {
         // update the new node id on the changeset
         // TODO is this step necessary?
         entity.id = ids[i];
-        // Check for Node tags. If they exist, they will be in the form of an array.
-        if (entity.tag && entity.tag.length) {
-          tags.push(entity.tag.map(function(t) {
+
+        // Check for Node tags, and validate as array.
+        if (entity.tag) {
+          var _tags = validateArray(entity.tag);
+          tags.push(_tags.map(function(t) {
             return {
               k: t.k,
               v: t.v,
@@ -228,9 +233,9 @@ var Node = {
       if (tags.length) {
         tags = [].concat.apply([], tags);
 
-        return Promise.map(Chunk(tags), function(tags) {
+        return Promise.all(Chunk(tags).map(function(tags) {
           return q.transaction(NodeTag.tableName).insert(tags)
-        }, {concurrency: 1})
+        }))
 
         .catch(function(err) {
           log.error('Creating node tags in create', err);
@@ -240,9 +245,9 @@ var Node = {
       return [];
     }
 
-    return Promise.map(Chunk(models), function(models) {
+    return Promise.all(Chunk(models).map(function(models) {
       return q.transaction(Node.tableName).insert(models).returning('id');
-    }, {concurrency: 1})
+    }))
     .then(remap)
     .then(saveTags)
     .catch(function(err) {
@@ -254,15 +259,19 @@ var Node = {
   modify: function(q) {
     var raw = q.changeset.modify.node;
 
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
     function deleteTags () {
       var ids = raw.map(function(entity) { return parseInt(entity.id, 10); });
       return q.transaction(NodeTag.tableName).whereIn('node_id', ids).del();
     }
 
-    return Promise.map(raw, function(entity) {
+    return Promise.all(raw.map(function(entity) {
       return q.transaction(Node.tableName).where({id: entity.id})
         .update(Node.fromEntity(entity, q.meta));
-    })
+    }))
     .then(deleteTags)
     .then(function () {
       var tags = [];

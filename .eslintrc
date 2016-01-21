@@ -1,0 +1,37 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "node": true,
+    "es6": true,
+    "mocha": true
+  },
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "classes": true
+  },
+  "rules": {
+    "no-unused-vars": [1, {"vars": "all", "args": "none"}],
+    "indent": [2, 2],
+    "quotes": [2, "single"],
+    "no-multi-spaces": 0,
+    "key-spacing": 0,
+    "strict": [2, "global"],
+    "comma-dangle": [0],
+    "no-shadow": [0],
+    "no-console": [0],
+    "no-use-before-define": [2, "nofunc"],
+    "new-cap": [0],
+    "func-names": [0],
+    "dot-notation": [0],
+    "no-trailing-spaces": [1],
+    "id-length": [0],
+    "no-nested-ternary": [0],
+    "no-undef": 1,
+    "semi": 1,
+
+    "object-curly-spacing": 0,
+    "space-before-function-paren": 0,
+    "object-shorthand": 0
+  }
+}

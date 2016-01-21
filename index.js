@@ -1,5 +1,13 @@
 'use strict';
+
+var _debug = require('debug');
 var Hapi = require('hapi');
+var util = require('util');
+var xml2json = require('xml2json');
+
+var meta = require('./package.json');
+var debug = _debug(util.format('%s:http', meta.name));
+
 var server = new Hapi.Server({
   connections: {
     routes: {
@@ -14,6 +22,12 @@ var server = new Hapi.Server({
 
 server.connection({ port: process.env.PORT || 4000 });
 
+
+server.ext('onRequest', function(req, res) {
+  debug('%s %s', req.method.toUpperCase(), req.url.href);
+  return res.continue();
+});
+
 // Register routes
 server.register({
   register: require('hapi-router'),
@@ -22,6 +36,17 @@ server.register({
   }
 }, function (err) {
   if (err) throw err;
+});
+
+server.ext('onPostAuth', function(req, res) {
+  if (req.mime === 'text/xml' && Object.keys(req.payload || {}).length > 0) {
+    debug(req.payload);
+    req.payload = xml2json.toJson(req.payload, {
+      object: true
+    });
+  }
+
+  return res.continue();
 });
 
 server.start(function () {

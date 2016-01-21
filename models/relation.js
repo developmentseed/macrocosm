@@ -7,13 +7,12 @@
  */
 
 var _ = require('lodash');
-var Boom = require('boom');
-var Promise = require('bluebird');
 
-var knex = require('../connection.js');
 var Member = require('./relation-member.js');
 var RelationTag = require('./relation-tag.js');
 var log = require('../services/log');
+
+var validateArray = require('../util/validate-array');
 
 var Relation = {
 
@@ -80,8 +79,9 @@ var Relation = {
     raw.forEach(function(entity, i) {
 
       var id = ids[i];
-      if (entity.tag && entity.tag.length) {
-        tags.push(entity.tag.map(function(tag) {
+      if (entity.tag) {
+        var _tags = validateArray(entity.tag);
+        tags.push(_tags.map(function(tag) {
           return {
             k: tag.k,
             v: tag.v,
@@ -90,8 +90,9 @@ var Relation = {
         }));
       }
 
-      if (entity.member && entity.member.length) {
-        members.push(entity.member.map(function(member, i) {
+      if (entity.member) {
+        var _members = validateArray(entity.member);
+        members.push(_members.map(function(member, i) {
 
           // We can use the map variable to get the newly-created entity ID
           // if the one that came from the editor is a negative value.
@@ -134,13 +135,13 @@ var Relation = {
     var actions = [];
     var model = this;
     ['create', 'modify', 'delete'].forEach(function(action) {
-      if (q.changeset[action].relation) {
+      if (q.changeset[action] && q.changeset[action].relation) {
         actions.push(action);
       }
     });
-    return Promise.map(actions, function(action) {
+    return Promise.all(actions.map(function(action) {
       return model[action](q);
-    })
+    }))
     .catch(function(err) {
       log.error('Relation changeset fails', err);
       throw new Error(err);
@@ -148,7 +149,7 @@ var Relation = {
   },
 
   create: function(q) {
-    var raw = q.changeset.create.relation;
+    var raw = validateArray(q.changeset.create.relation);
 
     var models = raw.map(function(entity) {
       return Relation.fromEntity(entity, q.meta);
@@ -173,12 +174,17 @@ var Relation = {
 
   modify: function(q) {
     var raw = q.changeset.modify.relation;
+
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
     var ids = _.pluck(raw, 'id');
 
-    return Promise.map(raw, function(entity) {
+    return Promise.all(raw.map(function(entity) {
       var model = Relation.fromEntity(entity, q.meta);
       return q.transaction(Relation.tableName).where({ id: entity.id }).update(model)
-    })
+    }))
     .then(function() {
       return Relation.destroyDependents(ids, q.transaction);
     })
@@ -195,6 +201,11 @@ var Relation = {
   // to see if any relation is a part of any other relation.
   'delete': function(q) {
     var raw = q.changeset['delete'].relation;
+
+    if (!Array.isArray(raw)) {
+      raw = [raw];
+    }
+
     var ids = _.pluck(raw, 'id');
 
     return q.transaction(Relation.tableName).whereIn('id', ids)

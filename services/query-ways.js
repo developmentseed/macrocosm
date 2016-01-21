@@ -25,11 +25,17 @@ module.exports = function queryWays(knex, wayIds) {
   return Promise.all([
     knex('current_ways').whereIn('id', wayIds),
     knex('current_way_nodes')
+      .orderBy('way_id', 'asc')
       .orderBy('sequence_id', 'asc')
-      .whereIn('way_id', wayIds),
+      .whereIn('way_id', wayIds)
+      .distinct('node_id AS id')
+      .select('way_id', 'sequence_id'),
     knex('current_relation_members')
+      .orderBy('relation_id', 'asc')
+      .orderBy('sequence_id', 'asc')
       .where('member_type', 'Way')
       .whereIn('member_id', wayIds)
+      .select('relation_id AS id', 'member_id', 'member_role')
   ])
   .then(function (result) {
 
@@ -38,10 +44,9 @@ module.exports = function queryWays(knex, wayIds) {
 
     var wayIds = _.pluck(result[0], 'id');
     var nodeIds = _(result[1])
-      .unique('node_id')
-      .pluck('node_id')
+      .pluck('id')
       .value();
-    var relationIds = _.pluck(result[2], 'relation_id');
+    var relationIds = _.pluck(result[2], 'id');
 
     return Promise.all(result.concat([
       select('current_nodes', 'id', nodeIds),

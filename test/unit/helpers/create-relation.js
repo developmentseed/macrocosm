@@ -13,6 +13,7 @@ var newRelation = function(attributes) {
     version: 0,
     id: -1,
     changeset: 1,
+    timestamp: new Date()
   };
   if (attributes) {
     entity = _.extend({}, entity, attributes);
