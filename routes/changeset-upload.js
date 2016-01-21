@@ -225,6 +225,25 @@ module.exports = [
     handler: upload
   },
   {
+    /**
+     * @api {POST} /api/0.6/changeset/:id/upload Upload changeset data
+     * @apiGroup Changeset
+     * @apiName UploadChangeset06
+     * @apiDescription Upload an OsmChange document to a given changeset.
+     * Returns a <code>diffResult</code>.
+     *
+     * @apiExample {xml} Payload
+     *  <osmChange version="0.6" generator="acme osm editor">
+     *    <modify>
+     *      <node id="1234" changeset="42" version="2" lat="12.1234567" lon="-8.7654321"/>
+     *        <tag k="amenity" v="school"/>
+     *      </node>
+     *    </modify>
+     *  </osmChange>
+     *
+     * @apiExample {curl} Example Usage:
+     *  curl -d @change.osc -H 'Content-Type: text/xml' http://localhost:4000/api/0.6/changeset/1/upload
+     */
     method: 'POST',
     path: '/api/0.6/changeset/{changesetID}/upload',
     handler: upload

@@ -65,6 +65,26 @@ module.exports = [
     }
   },
   {
+    /**
+     * @api {get} /api/0.6/nodes Get one or more nodes by ID
+     * @apiGroup Features
+     * @apiName MultiNode06
+     * @apiDescription Returns OSM XML for requested node(s).
+     *
+     * @apiParam {String} nodes Node IDs (comma-delimited)
+     *
+     * @apiExample {curl} Example Usage:
+     *    curl http://localhost:4000/api/0.6/nodes?nodes=74038,74039
+     *
+     * @apiSuccessExample {xml} Success-Response:
+     *  <osm version="6" generator="OpenRoads">
+     *    <node id="74038" visible="true"
+     *      version="1" changeset="0"
+     *      timestamp="Wed Mar 11 2015 09:38:41 GMT+0000 (UTC)"
+     *      user="OpenRoads" uid="1"
+     *      lat="9.5820416" lon="123.8162931"/>
+     *  </osm>
+     */
     method: 'GET',
     path: '/api/0.6/nodes',
     handler: function(req, res) {

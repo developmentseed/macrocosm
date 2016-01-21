@@ -94,19 +94,40 @@ module.exports = [
      * @apiParam {Number} uid User ID
      * @apiParam {String} user User name
      *
-     * @apiSuccess {Number} id Created changeset ID
-     *
      * @apiExample {curl} Example Usage:
      *    curl -X PUT --data "uid=1&user=openroads" http://localhost:4000/changeset/create
      *
-     * @apiSuccessExample {json} Success-Response:
-     *  {"id":"1194"}
+     * @apiSuccessExample {Number} Success-Response:
+     *  1194
      */
     method: 'PUT',
     path: '/changeset/create',
     handler: changesetCreate
   },
   {
+    /**
+     * @api {put} /api/0.6/changeset/create Create a changeset
+     * @apiGroup Changeset
+     * @apiName CreateChangeset06
+     * @apiDescription Create a new changeset and return the newly created
+     * changeset ID.
+     *
+     * @apiExample {xml} Payload
+     *  <osm>
+     *   <changeset>
+     *     <tag k="created_by" v="JOSM 1.61"/>
+     *     <tag k="comment" v="Just adding some streetnames"/>
+     *     ...
+     *   </changeset>
+     *   ...
+     *  </osm>
+     *
+     * @apiExample {curl} Example Usage
+     *    curl -X PUT -d @changeset.xml -H 'Content-Type: text/xml' http://localhost:4000/changeset/create
+     *
+     * @apiSuccessExample {Number} Success-Response:
+     *  1194
+     */
     method: 'PUT',
     path: '/api/0.6/changeset/create',
     handler: changesetCreate
