@@ -3,6 +3,7 @@
 var Boom = require('boom');
 var knex = require('../connection');
 var validateArray = require('../util/validate-array');
+var _ = require('lodash');
 
 function changesetCreate(req, res) {
   var now = new Date();
@@ -26,7 +27,6 @@ function changesetCreate(req, res) {
       if (users.length > 0) {
         return uid;
       }
-
       return knex('users')
         .insert({
           id: uid,
@@ -39,42 +39,40 @@ function changesetCreate(req, res) {
           creation_time: new Date()
         });
     })
+
     .then(function () {
       // TODO do this in a transaction
       return knex('changesets')
-        .returning('id')
-        .insert({
-          user_id: uid,
-          created_at: now,
-          closed_at: now,
-          num_changes: 0
-        })
-        .then(function(ids) {
-          if (ids.length < 1) {
-            throw new Error('Could not add changeset to database.');
-          }
-          return ids[0];
-        })
-        .then(function(id) {
-          if (changeset.tag == null || changeset.tag.length === 0) {
-            return id;
-          }
+      .returning('id')
+      .insert({
+        user_id: uid,
+        created_at: now,
+        closed_at: now,
+        num_changes: 0
+      })
+    })
 
-          var tags = changeset.tag.map(function(tag) {
-            tag.changeset_id = id;
-            return tag;
-          });
+    .then(function(ids) {
+      if (!ids.length) { throw new Error('Could not add changeset to database.'); }
+      var id = ids[0];
+      if (changeset.tag == null || changeset.tag.length === 0) { return id; }
 
-          return knex('changeset_tags')
-            .insert(tags)
-            .then(function() {
-              return id;
-            });
+      var tags = changeset.tag.map(function(tag) {
+        return _.extend({}, tag, {
+          changeset_id: id
+        });
+      });
+      return knex('changeset_tags')
+        .insert(tags)
+        .then(function() {
+          return id;
         });
     })
+
     .then(function(id) {
       return res(id).type('text/plain');
     })
+
     .catch(function (err) {
       console.log(err.stack);
       return res(Boom.wrap(err));
