@@ -4,20 +4,13 @@ var Boom = require('boom');
 var _ = require('lodash');
 var knex = require('../connection');
 var validateArray = require('../util/validate-array');
-var BoundingBox = require('../services/bounding-box');
 
 function changesetCreate(req, res) {
   var now = new Date();
-
-  // these would be attached from OAuth authorizations
-  req.payload.uid = req.payload.uid || 1;
-  req.payload.user = req.payload.user || 'placeholder';
-
   var changeset = req.payload.osm.changeset;
-  var bbox = BoundingBox.fromChangeset(changeset);
   changeset.tag = validateArray(changeset.tag);
-  var uid = req.payload.uid;
-  var userName = req.payload.user;
+  var uid = req.payload.osm.uid || 1;
+  var userName = req.payload.osm.user || 'placeholder';
 
   if (!uid || !userName) {
     return res(Boom.badRequest('A new changeset must include a user id and a username.'));
@@ -35,7 +28,7 @@ function changesetCreate(req, res) {
           display_name: userName,
           // TODO: we aren't using the following fields; they're just here to
           // cooperate w the database schema.
-          email: uid + '@openroads.org',
+          email: uid + '@email.org',
           pass_crypt: '00000000000000000000000000000000',
           data_public: true,
           creation_time: new Date()
@@ -46,12 +39,12 @@ function changesetCreate(req, res) {
       // TODO do this in a transaction
       return knex('changesets')
       .returning('id')
-      .insert(_.extend({
+      .insert({
         user_id: uid,
         created_at: now,
         closed_at: now,
         num_changes: 0
-      }, bbox.toObject()))
+      })
     })
 
     .then(function(ids) {
@@ -95,7 +88,7 @@ module.exports = [
      * @apiParam {String} user User name
      *
      * @apiExample {curl} Example Usage:
-     *    curl -X PUT --data "uid=1&user=openroads" http://localhost:4000/changeset/create
+     *    curl -X PUT --data "uid=1&user=john" http://localhost:4000/changeset/create
      *
      * @apiSuccessExample {Number} Success-Response:
      *  1194
@@ -114,6 +107,8 @@ module.exports = [
      *
      * @apiExample {xml} Payload
      *  <osm>
+     *   <user>john</user>
+     *   <uid>1</uid>
      *   <changeset>
      *     <tag k="created_by" v="JOSM 1.61"/>
      *     <tag k="comment" v="Just adding some streetnames"/>
