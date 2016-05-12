@@ -1,9 +1,10 @@
 'use strict';
 
 var Boom = require('boom');
+var _ = require('lodash');
 var knex = require('../connection');
 var validateArray = require('../util/validate-array');
-var _ = require('lodash');
+var BoundingBox = require('../services/bounding-box');
 
 function changesetCreate(req, res) {
   var now = new Date();
@@ -13,6 +14,7 @@ function changesetCreate(req, res) {
   req.payload.user = req.payload.user || 'placeholder';
 
   var changeset = req.payload.osm.changeset;
+  var bbox = BoundingBox.fromChangeset(changeset);
   changeset.tag = validateArray(changeset.tag);
   var uid = req.payload.uid;
   var userName = req.payload.user;
@@ -44,12 +46,12 @@ function changesetCreate(req, res) {
       // TODO do this in a transaction
       return knex('changesets')
       .returning('id')
-      .insert({
+      .insert(_.extend({
         user_id: uid,
         created_at: now,
         closed_at: now,
         num_changes: 0
-      })
+      }, bbox.toObject()))
     })
 
     .then(function(ids) {

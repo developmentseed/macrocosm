@@ -39,6 +39,8 @@ function Bbox(minMaxLatLon) {
   }
 
   if (this.error) {
+    console.warn(this.error.toUpperCase());
+    console.warn('Setting bounding box to null values');
     bounds = nullLatLon;
   }
 
@@ -77,6 +79,15 @@ Bbox.prototype.toArray = function() {
   return [this.minLon, this.minLat, this.maxLon, this.maxLat];
 }
 
+Bbox.prototype.toObject = function () {
+  return _.extend({}, {
+    min_lon: this.minLon,
+    min_lat: this.minLat,
+    max_lon: this.maxLon,
+    max_lat: this.maxLat
+  });
+}
+
 Bbox.prototype.toString = function() {
   return this.toArray().join(',');
 }
@@ -90,7 +101,7 @@ Bbox.prototype.toScaled = function() {
 }
 
 function isValidBounds(bounds) {
-  if(bounds.length !== 4) return false;
+  if (bounds.length !== 4) return false;
   for(var i = 0; i < 4; ++i) {
     var coord = bounds[i];
     if (typeof coord === 'undefined' || isNaN(coord)) {
@@ -138,6 +149,9 @@ var getBbox = {
       lat.push(parseFloat(node.lat));
     }
     return new Bbox([ _.min(lon), _.min(lat), _.max(lon), _.max(lat) ]);
+  },
+  fromChangeset: function (cs) {
+    return new Bbox([cs.min_lon, cs.min_lat, cs.max_lon, cs.max_lat]);
   }
 };
 
