@@ -12,14 +12,15 @@ describe('changeset query endpoint', function () {
       method: 'PUT',
       url: '/changeset/create',
       payload: {
-        uid: 1,
-        user: 'macrocosm',
-        comment: 'test comment',
-        osm: {changeset: new Changeset().getAttrs({
-          tag: [
-            { k: 'super', v: 'duper' },
-          ]
-        })}
+        osm: {
+          uid: 1,
+          user: 'macrocosm',
+          changeset: new Changeset().getAttrs({
+            tag: [
+              { k: 'super', v: 'duper' },
+            ]
+          })
+        }
       }
     })
     .then(function () {
@@ -31,7 +32,6 @@ describe('changeset query endpoint', function () {
         var doc = libxml.parseXmlString(res.payload);
         should(doc.get('//changeset[@user="macrocosm"]')).ok;
         should(doc.get('//tag[@k="super"]')).ok;
-        should(doc.get('//changeset[@min_lat="1"]')).ok;
         done();
       });
     });
@@ -42,12 +42,11 @@ describe('changeset query endpoint', function () {
       method: 'PUT',
       url: '/changeset/create',
       payload: {
-        uid: 9,
-        user: 'no-tag',
-        comment: 'test comment',
-        osm: {changeset: new Changeset().getAttrs({
-          tag: []
-        })}
+        osm: {
+          uid: 9,
+          user: 'no-tag',
+          changeset: new Changeset().getAttrs({tag: []})
+        }
       }
     })
     .then(function () {

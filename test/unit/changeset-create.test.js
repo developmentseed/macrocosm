@@ -9,10 +9,11 @@ describe('changeset create endpoint', function () {
       method: 'PUT',
       url: '/changeset/create',
       payload: {
-        uid: 99,
-        user: 'openroads',
-        comment: 'test comment',
-        osm: {changeset: new Changeset().getAttrs()}
+        osm: {
+          uid: 99,
+          user: 'openroads',
+          changeset: new Changeset().getAttrs()
+        }
       }
     })
     .then(function (res) {
