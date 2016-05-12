@@ -7,7 +7,7 @@ var should = require('should');
 
 describe('changeset query endpoint', function () {
 
-  it('queries on user and returns tags', function (done) {
+  it('queries on user and returns tags, bbox', function (done) {
     server.injectThen({
       method: 'PUT',
       url: '/changeset/create',
@@ -31,6 +31,7 @@ describe('changeset query endpoint', function () {
         var doc = libxml.parseXmlString(res.payload);
         should(doc.get('//changeset[@user="macrocosm"]')).ok;
         should(doc.get('//tag[@k="super"]')).ok;
+        should(doc.get('//changeset[@min_lat="1"]')).ok;
         done();
       });
     });
