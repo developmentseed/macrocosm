@@ -4,17 +4,14 @@ var Boom = require('boom');
 var _ = require('lodash');
 var knex = require('../connection');
 var validateArray = require('../util/validate-array');
+var log = require('../services/log');
 
 function changesetCreate(req, res) {
   var now = new Date();
   var changeset = req.payload.osm.changeset;
   changeset.tag = validateArray(changeset.tag);
   var uid = req.payload.osm.uid || 1;
-  var userName = req.payload.osm.user || 'placeholder';
-
-  if (!uid || !userName) {
-    return res(Boom.badRequest('A new changeset must include a user id and a username.'));
-  }
+  var username = req.payload.osm.user || 'placeholder';
 
   knex('users')
     .where('id', uid)
@@ -25,7 +22,7 @@ function changesetCreate(req, res) {
       return knex('users')
         .insert({
           id: uid,
-          display_name: userName,
+          display_name: username,
           // TODO: we aren't using the following fields; they're just here to
           // cooperate w the database schema.
           email: uid + '@email.org',
@@ -69,7 +66,7 @@ function changesetCreate(req, res) {
     })
 
     .catch(function (err) {
-      console.log(err.stack);
+      log.error(err);
       return res(Boom.wrap(err));
     });
 }

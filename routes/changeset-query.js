@@ -3,7 +3,8 @@
 var Boom = require('boom');
 var knex = require('../connection');
 var _ = require('lodash');
-var XML = require('../services/xml.js');
+var XML = require('../services/xml');
+var log = require('../services/log');
 
 // Currently, this only supports querying the changeset table by user.
 function changesetQuery(req, res) {
@@ -17,7 +18,7 @@ function changesetQuery(req, res) {
   .where('id', user)
   .then(function (userResponse) {
     if (!userResponse.length) {
-      return res(Boom.notFound('No user with that id!'));
+      throw new Error('No user with that id!');
     }
     userName = userResponse[0].display_name;
     return knex('changesets')
@@ -28,7 +29,7 @@ function changesetQuery(req, res) {
 
   .then(function (changesets) {
     if (!changesets.length) {
-      return res(Boom.notFound('No changesets found for that query'));
+      throw new Error('No changesets found for that query');
     }
     var result = _.chain(changesets).groupBy('id')
       .values()
@@ -50,6 +51,10 @@ function changesetQuery(req, res) {
         return change
       }).value();
     return res(XML.write({changesets: result}).toString()).type('text/xml');
+  })
+  .catch(function (e) {
+    log.error(e);
+    return res(Boom.notFound(e.message));
   });
 }
 

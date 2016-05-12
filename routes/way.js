@@ -1,10 +1,11 @@
 'use strict';
 var Boom = require('boom');
 
-var knex = require('../connection.js');
-var queryWays = require('../services/query-ways.js');
-var XML = require('../services/xml.js');
-var Node = require('../models/node-model.js');
+var knex = require('../connection');
+var queryWays = require('../services/query-ways');
+var XML = require('../services/xml');
+var log = require('../services/log');
+var Node = require('../models/node-model');
 
 function serveSingleWay(req, res) {
   var wayId = parseInt(req.params.wayId || '', 10);
@@ -21,8 +22,8 @@ function serveSingleWay(req, res) {
     response.type('text/xml');
   })
   .catch(function (err) {
-    console.log(err);
-    res(Boom.wrap(err));
+    log.error(err);
+    return res(Boom.wrap(err));
   });
 }
 

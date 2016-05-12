@@ -30,12 +30,9 @@ function upload(req, res) {
 
     .then(function(meta) {
       if (meta.length === 0) {
-        return res(Boom.badRequest('Could not find changeset'));
+        throw {name: notFound};
       }
-      return _upload(meta[0], changesetPayload).catch(function(err) {
-        log.error('Changeset transaction fails', err);
-        return res(Boom.badImplementation('Could not complete changeset actions'));
-      });
+      return _upload(meta[0], changesetPayload);
     })
 
     .then(function(changeObject) {
@@ -49,8 +46,13 @@ function upload(req, res) {
     })
 
     .catch(function(err) {
-      log.error('Changeset not found', err);
-      return res(Boom.badRequest('Could not find changeset'));
+      if (err.name === 'notFound') {
+        log.error('Changeset not found', err);
+        return res(Boom.badRequest('Could not find changeset'));
+      } else {
+        log.error(err);
+        return res(Boom.badImplementation('Could not complete changeset actions'))
+      }
     });
 }
 
@@ -101,7 +103,7 @@ function _upload(meta, changeset) {
         // https://github.com/tgriesser/knex/issues/362
 
         log.error('Changeset update fails', err);
-        throw Boom.badImplementation('Could not update changeset');
+        throw res(Boom.badImplementation('Could not update changeset'));
       });
   });
 }

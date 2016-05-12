@@ -8,6 +8,8 @@ var nullLatLon = [null,null,null,null];
 var lonLimit = 180.0;
 var latLimit = 90.0;
 
+var log = require('./log');
+
 // In OSM, the order goes min_lon, min_lat, max_lon, max_lat.
 // All bounding box checks assume the input is unscaled.
 function Bbox(minMaxLatLon) {
@@ -39,8 +41,8 @@ function Bbox(minMaxLatLon) {
   }
 
   if (this.error) {
-    console.warn(this.error.toUpperCase());
-    console.warn('Setting bounding box to null values');
+    log.error(this.error.toUpperCase());
+    log.error('Setting bounding box to null values');
     bounds = nullLatLon;
   }
 

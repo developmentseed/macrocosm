@@ -27,7 +27,7 @@ function mapHandler (req, res) {
     response.type('text/xml');
   })
   .catch(function (err) {
-    res(Boom.wrap(err));
+    return res(Boom.wrap(err));
   });
 }
 
