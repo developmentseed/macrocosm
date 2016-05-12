@@ -30,7 +30,7 @@ function upload(req, res) {
 
     .then(function(meta) {
       if (meta.length === 0) {
-        throw {name: notFound};
+        throw {name: 'notFound'};
       }
       return _upload(meta[0], changesetPayload);
     })
@@ -48,7 +48,7 @@ function upload(req, res) {
     .catch(function(err) {
       if (err.name === 'notFound') {
         log.error('Changeset not found', err);
-        return res(Boom.badRequest('Could not find changeset'));
+        return res(Boom.notFound('Could not find changeset'));
       } else {
         log.error(err);
         return res(Boom.badImplementation('Could not complete changeset actions'))
