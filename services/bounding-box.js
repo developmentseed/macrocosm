@@ -19,10 +19,10 @@ function Bbox(minMaxLatLon) {
   if (!isValidBounds(bounds)) {
     this.logError('Latitude/longitude bounds must be valid coordinates.');
   }
-  else if (bounds[0] > bounds[2]) {
+  else if (bounds[0] > bounds[2] && bounds[0] !== bounds[2]) {
     this.logError('The minimum longitude must be less than the maximum, but is not.');
   }
-  else if (bounds[1] > bounds[3]) {
+  else if (bounds[1] > bounds[3] && bounds[1] !== bounds[3]) {
     this.logError('The minimum latitude must be less than the maximum, but is not.');
   }
   else if (bounds[0] < -lonLimit ||
