@@ -13,7 +13,8 @@ var Way = require('../../models/way.js');
 var mock = {
   Node: require('./helpers/create-node.js'),
   Way: require('./helpers/create-way.js'),
-  Relation: require('./helpers/create-way.js')
+  Relation: require('./helpers/create-way.js'),
+  Changeset: require('./helpers/create-changeset')
 };
 
 function jsonRmTimes(entity) {
@@ -86,6 +87,17 @@ describe('XML', function() {
       var xml = XML.write({ relations: [relation.entity] }).toString();
       var doc = libxml.parseXmlString(xml);
       doc.get('//tag').toString().should.eql('<tag k="1" v="1"/>');
+    });
+
+    it('writes changesets', function () {
+      var changeset = new mock.Changeset().getAttrs({
+        uid: 'roboto',
+        tags: [{ k: 1, v: 1}]
+      });
+      var xml = XML.write({ changesets: [changeset] })
+      var doc = libxml.parseXmlString(xml);
+      doc.get('//tag').toString().should.eql('<tag k="1" v="1"/>');
+      doc.get('//changeset').attr('uid').value().should.eql('roboto');
     });
 
     it('Throws error if entity has no timestamp', function () {

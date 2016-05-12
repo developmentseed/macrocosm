@@ -67,4 +67,20 @@ newChange.prototype.wipe = function() {
   };
 }
 
+newChange.prototype.getAttrs = function (attr) {
+  return _.extend({}, {
+    id: 1,
+    created_at: new Date(),
+    closed_at: new Date(),
+    min_lat: 0,
+    max_lat: 0,
+    min_lon: 0,
+    max_lon: 0,
+    num_changes: 0,
+    user: 'test',
+    uid: 1,
+    tag: []
+  }, attr);
+};
+
 module.exports = newChange;
