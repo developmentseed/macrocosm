@@ -270,7 +270,7 @@ describe('upload error handling', function () {
       }
     })
     .then(function (res) {
-      res.statusCode.should.eql(400);
+      res.statusCode.should.eql(404);
       done();
     });
   });
