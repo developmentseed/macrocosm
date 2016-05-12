@@ -39,14 +39,13 @@ function changesetQuery(req, res) {
         change.uid = user;
         change.open = 'false';
         change.tags = tags.map(function (tag) {
-          if (tag.hasOwnProperty('k') && tag.hasOwnProperty('v')
-             && tag.k !== null && tag.v !== null) {
+          if (tag.hasOwnProperty('k') && tag.k !== null) {
             return {
               k: tag.k,
               v: tag.v
             };
           }
-          return false;
+          else return false;
         }).filter(Boolean);
         return change
       }).value();
