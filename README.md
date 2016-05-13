@@ -15,10 +15,18 @@ API docs are [available here](http://devseed.com/macrocosm/).
 
 ## Installation
 
+### Installing Macrocosm
 ```sh
 git clone git@github.com:developmentseed/macrocosm.git
 cd macrocosm
 npm install
+```
+
+### Installing iD
+```sh
+git submodule update --init
+cd iD
+make
 ```
 
 ## Local development using Docker
@@ -26,7 +34,24 @@ This repo comes with Docker configuration to spin up the API and a database. Thi
 
 To set up your environment, make sure `docker` and `docker-compose` are installed on your machine. For Mac OS X and Windows download the [Docker Toolbox](https://www.docker.com/docker-toolbox). For Linux follow [these](https://docs.docker.com/compose/install/) instructions.
 
-For Mac OS X or Windows, make sure you're running the following commands in a terminal that has the docker environment variables set. This can be done by running the `Docker Quickstart Terminal` app, or running `eval $(docker-machine env default)`. Linux users may need to use `sudo`
+For Mac OS X or Windows, make sure you're running the following commands in a terminal that has the docker environment variables set. This can be done by running the `Docker Quickstart Terminal` app, or running `eval $(docker-machine env default)`. Linux users may need to use `sudo`. Then start the database and API in the root directory of this repo:
+
+```sh
+npm run docker-start
+```
+
+### Starting iD
+
+To serve iD, start a web server in the iD subdirectory, eg. `python -m SimpleHTTPServer`.
+
+You may need to change the url that iD posts changesets to, depending on your docker host ip address. To find this address, install [Docker Machine](https://docs.docker.com/machine/install-machine/) and use [`docker-machine env`](https://docs.docker.com/machine/reference/env/):
+
+```sh
+$ docker-machine env default
+DOCKER_HOST=tcp://192.168.99.101:2376
+```
+
+^ In this case, you would change the url to `//192.168.99.101:4000`.
 
 ### Running the database
 You can also just spin up the database and make it available on `$DOCKER_HOST:5433`:
@@ -44,7 +69,7 @@ npm run docker-test
 ```
 
 ## Running the API
-It is also possible to run the API without Docker. This is for example useful if you want to connect directly to the database running in Docker.
+It is also possible to run the API without Docker. This is for example useful if you want to connect to an instance of the database hosted elsewhere.
 
 Adapt the `local.js` file in your root directory that directs the API to a PostgreSQL database url (info on setting that up below). The placeholder contains the url for the database that Docker spins up.
 
