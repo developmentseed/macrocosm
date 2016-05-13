@@ -1,7 +1,7 @@
 # MACROCOSM
-[![Build Status](https://travis-ci.org/developmentseed/macrocosm.svg?branch=master)](https://travis-ci.org/developmentseed/macrocosm) 
+[![Build Status](https://travis-ci.org/developmentseed/macrocosm.svg?branch=master)](https://travis-ci.org/developmentseed/macrocosm)
 
-Macrocosm is a partial port of the Open Street Map [Ruby API](https://github.com/openstreetmap/openstreetmap-website) in NodeJS. With Macrocosm, you can host your own version of the OSM platform. It plays well with the [iD editor](https://github.com/openstreetmap/iD) but supports other data inputs, including direct uploads of OSM XML.
+Macrocosm is a partial port of the Open Street Map [Ruby API](https://github.com/openstreetmap/openstreetmap-website) in NodeJS. With Macrocosm, you can host your own version of the OSM platform. It comes bundled with a [fork](https://github.com/macrocosm/iD) the [iD editor](https://github.com/openstreetmap/iD) that has been lightly modified to send data to a local Macrocosm API (more on that below). Macrocosm supports other data inputs, including direct uploads of OSM XML.
 
 API docs are [available here](http://devseed.com/macrocosm/).
 
@@ -37,7 +37,7 @@ npm run docker-kill-db # kills the db
 ```
 
 ### Running tests
-The following command creates an empty postgres db, populates it with test data, and runs the tests against it. 
+The following command creates an empty postgres db, populates it with test data, and runs the tests against it.
 
 ```sh
 npm run docker-test
