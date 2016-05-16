@@ -8,6 +8,8 @@ var nullLatLon = [null,null,null,null];
 var lonLimit = 180.0;
 var latLimit = 90.0;
 
+var log = require('./log');
+
 // In OSM, the order goes min_lon, min_lat, max_lon, max_lat.
 // All bounding box checks assume the input is unscaled.
 function Bbox(minMaxLatLon) {
@@ -19,10 +21,10 @@ function Bbox(minMaxLatLon) {
   if (!isValidBounds(bounds)) {
     this.logError('Latitude/longitude bounds must be valid coordinates.');
   }
-  else if (bounds[0] > bounds[2]) {
+  else if (bounds[0] > bounds[2] && bounds[0] !== bounds[2]) {
     this.logError('The minimum longitude must be less than the maximum, but is not.');
   }
-  else if (bounds[1] > bounds[3]) {
+  else if (bounds[1] > bounds[3] && bounds[1] !== bounds[3]) {
     this.logError('The minimum latitude must be less than the maximum, but is not.');
   }
   else if (bounds[0] < -lonLimit ||
@@ -39,6 +41,8 @@ function Bbox(minMaxLatLon) {
   }
 
   if (this.error) {
+    log.error(this.error.toUpperCase());
+    log.error('Setting bounding box to null values');
     bounds = nullLatLon;
   }
 
@@ -77,6 +81,15 @@ Bbox.prototype.toArray = function() {
   return [this.minLon, this.minLat, this.maxLon, this.maxLat];
 }
 
+Bbox.prototype.toObject = function () {
+  return _.extend({}, {
+    min_lon: this.minLon,
+    min_lat: this.minLat,
+    max_lon: this.maxLon,
+    max_lat: this.maxLat
+  });
+}
+
 Bbox.prototype.toString = function() {
   return this.toArray().join(',');
 }
@@ -90,7 +103,7 @@ Bbox.prototype.toScaled = function() {
 }
 
 function isValidBounds(bounds) {
-  if(bounds.length !== 4) return false;
+  if (bounds.length !== 4) return false;
   for(var i = 0; i < 4; ++i) {
     var coord = bounds[i];
     if (typeof coord === 'undefined' || isNaN(coord)) {
@@ -138,6 +151,9 @@ var getBbox = {
       lat.push(parseFloat(node.lat));
     }
     return new Bbox([ _.min(lon), _.min(lat), _.max(lon), _.max(lat) ]);
+  },
+  fromChangeset: function (cs) {
+    return new Bbox([cs.min_lon, cs.min_lat, cs.max_lon, cs.max_lat]);
   }
 };
 

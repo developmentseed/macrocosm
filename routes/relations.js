@@ -55,8 +55,9 @@ module.exports = [
     method: 'GET',
     path: '/relations/{id}',
     handler: function (req, res) {
-      if(!req.params.id)
+      if(!req.params.id) {
         return res(Boom.badRequest('Valid relation id required.'));
+      }
 
       queryRelations([req.params.id], true)
       .then(res);

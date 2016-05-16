@@ -63,8 +63,8 @@ module.exports = {
       res(toGeoJSON(result));
     })
     .catch(function (err) {
-      console.log(err);
-      res(Boom.wrap(err));
+      log.error(err);
+      return res(Boom.wrap(err));
     });
   }
 };

@@ -71,26 +71,17 @@ var xml = {
       nodes = obj.nodes,
       ways = obj.ways,
       relations = obj.relations,
-      bbox = obj.bbox;
+      bbox = obj.bbox,
+      changesets = obj.changesets;
 
     var doc = xml.writeDoc();
     var root = doc.root();
 
-    if (bbox) {
-      xml.writebbox(bbox, root);
-    }
-
-    if (nodes) {
-      xml.writeNodes(nodes, root);
-    }
-
-    if (ways) {
-      xml.writeWays(ways, root);
-    }
-
-    if (relations) {
-      xml.writeRelations(relations, root);
-    }
+    if (bbox) { xml.writebbox(bbox, root); }
+    if (nodes) { xml.writeNodes(nodes, root); }
+    if (ways) { xml.writeWays(ways, root); }
+    if (relations) { xml.writeRelations(relations, root); }
+    if (changesets) { xml.writeChangesets(changesets, root); }
 
     return doc;
   },
@@ -197,6 +188,19 @@ var xml = {
         }
       }
     }
+  },
+
+  writeChangesets: function (changesets, root) {
+    if (!_.isArray(changesets)) {
+      changesets = [changesets];
+    }
+    changesets.forEach(function (changeset) {
+      var attributes = _.omit(changeset, 'tags');
+      var el = root.node('changeset').attr(attributes);
+      changeset.tags.forEach(function (tag) {
+        el.node('tag').attr(tag);
+      });
+    });
   }
 };
 

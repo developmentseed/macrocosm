@@ -2,10 +2,11 @@
 
 var Boom = require('boom');
 
-var knex = require('../connection.js');
-var queryWays = require('../services/query-ways.js');
-var XML = require('../services/xml.js');
-var Node = require('../models/node-model.js');
+var knex = require('../connection');
+var queryWays = require('../services/query-ways');
+var log = require('../services/log');
+var XML = require('../services/xml');
+var Node = require('../models/node-model');
 
 module.exports = [
   {
@@ -135,8 +136,8 @@ module.exports = [
         response.type('text/xml');
       })
       .catch(function(err) {
-        console.log(err);
-        res(Boom.wrap(err));
+        log.error(err);
+        return res(Boom.wrap(err));
       });
     }
   }

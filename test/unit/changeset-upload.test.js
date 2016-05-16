@@ -1,4 +1,4 @@
-'use strict';
+'usv strict';
 var _ = require('lodash');
 var knex = require('../../connection.js');
 var mocks = require('./fixtures/changesets.js');
@@ -11,6 +11,7 @@ var Relation = require('./helpers/create-relation.js');
 var Change = require('./helpers/create-changeset.js');
 var Area = require('./helpers/create-area');
 var serverTest = require('./helpers/server-test');
+var server = require('../bootstrap.test');
 
 var testChangeset = new serverTest.testChangeset();
 // Changeset Id. Shortcut for easy access.
@@ -256,5 +257,21 @@ describe('changeset upload endpoint', function() {
         done();
       })
       .catch(done);
+  });
+});
+
+describe('upload error handling', function () {
+  it('throws a 404 if the changeset is not found', function (done) {
+    server.injectThen({
+      method: 'POST',
+      url: '/changeset/-1/upload',
+      payload: {
+        osmChange: {}
+      }
+    })
+    .then(function (res) {
+      res.statusCode.should.eql(404);
+      done();
+    });
   });
 });
