@@ -51,9 +51,9 @@ $ docker-machine env default
 DOCKER_HOST=tcp://192.168.99.101:2376
 ```
 
-^ In this case, you would change the url to `//192.168.99.101:4000`.
+^ In this case, you would change the url to `//192.168.99.101:4000`. On Ubuntu, the API url will normally be `localhost:4000`.
 
-*Note* on Ubuntu, the API url will normally be `localhost:4000`.
+**Note** The bundled version of iD is only [lightly modified](https://github.com/macrocosm/iD/pull/1/commits/c7cc2f76c9719a294cdb72764c4942ea36910d2e). It will post changesets to a local Macrocosm API instead of OpenStreetMap, but the rest of the code base is unchanged. As such, we recommend it's use for local development and testing only.
 
 ### Running the database
 You can also just spin up the database and make it available on `$DOCKER_HOST:5433`:
