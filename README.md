@@ -44,7 +44,7 @@ npm run docker-start
 
 To serve iD, start a web server in the iD subdirectory, eg. `python -m SimpleHTTPServer`.
 
-You may need to change the url that iD posts changesets to, depending on your docker host ip address. To find this address, install [Docker Machine](https://docs.docker.com/machine/install-machine/) and use [`docker-machine env`](https://docs.docker.com/machine/reference/env/):
+You may need to change [the url that iD posts changesets to](https://github.com/macrocosm/iD/blob/master/js/id/core/connection.js#L29), depending on your docker host ip address. To find this address, install [Docker Machine](https://docs.docker.com/machine/install-machine/) and use [`docker-machine env`](https://docs.docker.com/machine/reference/env/):
 
 ```sh
 $ docker-machine env default
@@ -52,6 +52,8 @@ DOCKER_HOST=tcp://192.168.99.101:2376
 ```
 
 ^ In this case, you would change the url to `//192.168.99.101:4000`.
+
+*Note* on Ubuntu, the API url will normally be `localhost:4000`.
 
 ### Running the database
 You can also just spin up the database and make it available on `$DOCKER_HOST:5433`:
