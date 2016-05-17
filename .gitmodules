@@ -1,0 +1,3 @@
+[submodule "iD"]
+	path = iD
+	url = git://github.com/macrocosm/iD.git
