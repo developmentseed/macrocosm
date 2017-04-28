@@ -8,10 +8,18 @@ var log = require('../services/log');
 
 function changesetCreate(req, res) {
   var now = new Date();
-  var changeset = req.payload.osm.changeset;
-  changeset.tag = validateArray(changeset.tag);
-  var uid = req.payload.osm.uid || 1;
-  var username = req.payload.osm.user || 'placeholder';
+  var changeset = {};
+  var uid = 1;
+  var username = 'placeholder';
+  if (req.payload.osm) {
+    changeset = req.payload.osm.changeset;
+    changeset.tag = validateArray(changeset.tag);
+    uid = req.payload.osm.uid || uid;
+    username = req.payload.osm.user || uid;
+  } else {
+    uid = req.payload.uid;
+    username = req.payload.user;
+  }
 
   knex('users')
     .where('id', uid)
@@ -41,7 +49,7 @@ function changesetCreate(req, res) {
         created_at: now,
         closed_at: now,
         num_changes: 0
-      })
+      });
     })
 
     .then(function(ids) {
